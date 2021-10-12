@@ -9,11 +9,15 @@
 
 #### 模块结构
 
-├─files 项目文件（SQL、架构图等）
-├─trigger-admin 后台管理
-├─trigger-center 调度中心（服务端）
-├─trigger-client 客户端
-└─trigger-common 公共模块
+├─files 项目文件（SQL、架构图等） 
+
+├─trigger-admin 后台管理 
+
+├─trigger-center 调度中心（服务端） 
+
+├─trigger-client 客户端 
+
+└─trigger-common 公共模块 
 
 #### 使用教程
 
