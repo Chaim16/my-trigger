@@ -41,7 +41,8 @@ public class CronUtil {
         return sdf.parse(cron);
     }
 
-    /** 获取周期性时间 */
+    /** 周期性任务，获取下一次执行的时间
+     * @return*/
     public static Date getLoopTime(String cron, long time) throws ParseException {
         CronExpression cronExpression = new CronExpression(cron);
         return cronExpression.getNextValidTimeAfter(new Date(time));

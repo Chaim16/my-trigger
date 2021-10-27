@@ -4,4 +4,11 @@ spring:
     url: jdbc:mysql://localhost:3306/mytrigger?useUnicode=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8
     username: root
     password: 123456
+server:
+  port: 8080
 
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: cn.onedawn.mytrigger.triggercenter.dao.mapper
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

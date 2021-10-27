@@ -3,8 +3,13 @@ package cn.onedawn.mytrigger.triggercenter.service.impl;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.dao.mapper.JobMapper;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
+import cn.onedawn.mytrigger.utils.CronUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author qingming yu
@@ -19,8 +24,15 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private JobMapper jobMapper;
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Override
-    public boolean register(Job job) {
+    public boolean register(Job job) throws ParseException {
+        Date date = new Date();
+        String datetime = dateFormat.format(date);
+        job.setCreateTime(datetime);
+        job.setModifyTime(datetime);
+        job.setTriggerTime(dateFormat.format(CronUtil.getLoopTime(job.getCron(), System.currentTimeMillis())));
         return jobMapper.register(job);
     }
 

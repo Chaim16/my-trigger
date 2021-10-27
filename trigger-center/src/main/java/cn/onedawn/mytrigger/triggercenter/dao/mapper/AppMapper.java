@@ -1,6 +1,6 @@
 package cn.onedawn.mytrigger.triggercenter.dao.mapper;
 
-import cn.onedawn.mytrigger.pojo.APP;
+import cn.onedawn.mytrigger.pojo.App;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @createTime 2021年10月26日 17:31:00
  */
 @Mapper
-public interface APPMapper {
-    int register(APP app);
+public interface AppMapper {
+    int register(App app);
 }

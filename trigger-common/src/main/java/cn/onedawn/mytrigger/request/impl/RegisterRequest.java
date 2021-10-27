@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.request.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.APP;
+import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.Request;
@@ -26,11 +26,11 @@ public class RegisterRequest extends Request implements Serializable {
     @JSONField(name = "type")
     private RequestType type = RequestType.register;
 
-    @JSONField(name = "data")
+    @JSONField(name = "job")
     private Job job;
 
     @JSONField(name = "app")
-    private APP app;
+    private App app;
 
     @JSONField(name = "user")
     private User user;

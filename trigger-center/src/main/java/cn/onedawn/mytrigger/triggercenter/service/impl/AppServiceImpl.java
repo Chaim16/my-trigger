@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.service.impl;
 
-import cn.onedawn.mytrigger.pojo.APP;
-import cn.onedawn.mytrigger.triggercenter.dao.mapper.APPMapper;
+import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.triggercenter.dao.mapper.AppMapper;
 import cn.onedawn.mytrigger.triggercenter.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppServiceImpl implements AppService {
     @Autowired
-    APPMapper appMapper;
+    AppMapper appMapper;
 
     @Override
-    public boolean register(APP app) {
+    public boolean register(App app) {
         return appMapper.register(app) > 0;
     }
 }

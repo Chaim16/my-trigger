@@ -3,6 +3,8 @@ package cn.onedawn.mytrigger.triggercenter.service;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.Request;
 
+import java.text.ParseException;
+
 /**
  * @author qingming yu
  * @version 1.0.0
@@ -11,7 +13,7 @@ import cn.onedawn.mytrigger.request.Request;
  * @createTime 2021年10月26日 10:20:00
  */
 public interface JobService {
-    boolean register(Job job);
+    boolean register(Job job) throws ParseException;
 
     boolean remove(Long jobId);
 

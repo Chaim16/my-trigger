@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class APP implements Serializable {
+public class App implements Serializable {
     private Long id;
     private String appName;
     private String appId;

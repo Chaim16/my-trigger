@@ -1,6 +1,6 @@
 package cn.onedawn.mytrigger.triggercenter.service;
 
-import cn.onedawn.mytrigger.pojo.APP;
+import cn.onedawn.mytrigger.pojo.App;
 
 /**
  * @author qingming yu
@@ -10,5 +10,5 @@ import cn.onedawn.mytrigger.pojo.APP;
  * @createTime 2021年10月26日 16:35:00
  */
 public interface AppService {
-    boolean register(APP app);
+    boolean register(App app);
 }

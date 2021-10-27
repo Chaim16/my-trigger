@@ -3,7 +3,9 @@ package cn.onedawn.mytrigger.pojo;
 import cn.onedawn.mytrigger.type.CallType;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
+import javax.jws.HandlerChain;
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,7 @@ import java.io.Serializable;
  * @createTime 2021年10月26日 09:11:00
  */
 @Data
+@Accessors(chain = true)
 public class Job implements Serializable {
     @JSONField(name = "id")
     private Long id;
