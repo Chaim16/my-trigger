@@ -36,12 +36,20 @@ public class AppController {
         RegisterRequest registerRequest = JSON.parseObject(requestData, RegisterRequest.class);
         App app = registerRequest.getApp();
 
-        System.out.println(JSON.toJSONString(registerRequest));
         boolean result = appService.register(app);
         long end = System.currentTimeMillis();
 
         response.setSuccess(result);
         response.setTime(end - start);
+        return response;
+    }
+
+    @RequestMapping("modify")
+    public Response modify(HttpServletRequest request) {
+        Response response = new Response();
+
+
+
         return response;
     }
 

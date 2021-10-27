@@ -13,4 +13,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface JobMapper {
     boolean register(Job job);
+
+    int modify(Job job);
+
+    int remove(Long jobId);
 }

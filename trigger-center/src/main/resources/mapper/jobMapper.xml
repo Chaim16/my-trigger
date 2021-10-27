@@ -3,20 +3,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.onedawn.mytrigger.triggercenter.dao.mapper.JobMapper">
     <insert id="register" parameterType="cn.onedawn.mytrigger.pojo.Job">
-        insert into 任务 values(
-            null ,
-            #{status},
-            #{triggerTime},
-            #{remove},
-            #{callName},
-            #{callData},
-            #{callType},
-            #{callHost},
-            #{cron},
-            #{createTime},
-            #{modifyTime},
-            #{app}
-        )
+        insert into 任务
+        values (null,
+                #{status},
+                #{triggerTime},
+                #{remove},
+                #{callName},
+                #{callData},
+                #{callType},
+                #{callHost},
+                #{cron},
+                #{createTime},
+                #{modifyTime},
+                #{app})
     </insert>
+
+    <update id="modify" parameterType="cn.onedawn.mytrigger.pojo.Job">
+        update 任务
+        set status      = #{status},
+            triggerTime = #{triggerTime},
+            remove      = #{remove},
+            callName    = #{callName},
+            callData    = #{callData},
+            callType    = #{callType},
+            callHost    = #{callHost},
+            cron        = #{cron},
+            createTime  = #{createTime},
+            modifyTime  = #{modifyTime},
+            app         = #{app}
+        where id = #{id};
+    </update>
+
+    <update id="remove" parameterType="java.lang.Long">
+        update 任务
+        set remove      = 1
+        where id = #{id};
+    </update>
 
 </mapper>

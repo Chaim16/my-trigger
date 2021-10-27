@@ -11,20 +11,19 @@ import cn.onedawn.mytrigger.utils.StringUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author qingming yu
  * @version 1.0.0
- * @ClassName RegisterRequest.java
+ * @ClassName ModifyRequest.java
  * @Description TODO
- * @createTime 2021年10月26日 11:07:00
+ * @createTime 2021年10月27日 19:21:00
  */
 @Data
-public class RegisterRequest extends Request implements Serializable {
+public class ModifyRequest extends Request {
     @JSONField(name = "type")
-    private RequestType type = RequestType.register;
+    private RequestType type = RequestType.modify;
 
     @JSONField(name = "job")
     private Job job;

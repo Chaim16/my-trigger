@@ -1,5 +1,7 @@
 package cn.onedawn.mytrigger.exception;
 
+import java.text.ParseException;
+
 /**
  * @author qingming yu
  * @version 1.0.0
@@ -7,7 +9,7 @@ package cn.onedawn.mytrigger.exception;
  * @Description TODO 封装的异常
  * @createTime 2021年10月26日 08:30:00
  */
-public class MyTriggerException extends Exception{
+public class MyTriggerException extends Exception {
     public MyTriggerException() {
     }
 
