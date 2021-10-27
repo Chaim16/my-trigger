@@ -17,4 +17,6 @@ public interface JobMapper {
     int modify(Job job);
 
     int remove(Long jobId);
+
+    int pause(Long jobId);
 }

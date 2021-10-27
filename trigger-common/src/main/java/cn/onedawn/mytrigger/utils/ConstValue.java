@@ -10,6 +10,4 @@ package cn.onedawn.mytrigger.utils;
 public class ConstValue {
     public static final String REQUEST_DATA = "data";
 
-
-
 }

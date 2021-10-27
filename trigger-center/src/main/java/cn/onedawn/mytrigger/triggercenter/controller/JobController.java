@@ -80,6 +80,7 @@ public class JobController {
         return response;
     }
 
+
     @RequestMapping("remove")
     public Response remove(HttpServletRequest request) {
         Response response = new Response();
@@ -87,6 +88,21 @@ public class JobController {
         String requestData = request.getParameter(ConstValue.REQUEST_DATA);
         Long jobId = JSON.parseObject(requestData, Long.class);
         boolean result = jobService.remove(jobId);
+        long end = System.currentTimeMillis();
+        response.setSuccess(result)
+                .setInfo(null)
+                .setType(ResponseType.remove)
+                .setTime(end - start);
+        return response;
+    }
+
+    @RequestMapping("pause")
+    public Response pause(HttpServletRequest request) {
+        Response response = new Response();
+        long start = System.currentTimeMillis();
+        String requestData = request.getParameter(ConstValue.REQUEST_DATA);
+        Long jobId = JSON.parseObject(requestData, Long.class);
+        boolean result = jobService.pause(jobId);
         long end = System.currentTimeMillis();
         response.setSuccess(result)
                 .setInfo(null)

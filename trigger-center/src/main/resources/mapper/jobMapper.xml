@@ -40,4 +40,10 @@
         where id = #{id};
     </update>
 
+    <update id="pause" parameterType="java.lang.Long">
+        update 任务
+        set status      = "pause"
+        where id = #{id};
+    </update>
+
 </mapper>

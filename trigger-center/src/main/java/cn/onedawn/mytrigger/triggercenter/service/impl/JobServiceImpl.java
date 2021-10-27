@@ -98,7 +98,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public boolean pause(Long jobId) {
-        return false;
+        return jobMapper.pause(jobId) > 0;
     }
 
     @Override
