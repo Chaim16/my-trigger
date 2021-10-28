@@ -44,13 +44,14 @@ public class AppController {
         return response;
     }
 
-    @RequestMapping("modify")
-    public Response modify(HttpServletRequest request) {
-        Response response = new Response();
-
-
-
-        return response;
+    @RequestMapping("/findAppIdByAppName")
+    public String findAppIdByAppName(HttpServletRequest request) throws MyTriggerException {
+        String appName = request.getParameter("appName");
+        if (appName == null || appName.trim().length() == 0) {
+            throw new MyTriggerException("appName is null or black");
+        }
+        Long appId = appService.findAppIdByAppName(appName);
+        return String.valueOf(appId);
     }
 
 }

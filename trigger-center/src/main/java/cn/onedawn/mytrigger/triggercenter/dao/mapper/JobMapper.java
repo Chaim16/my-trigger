@@ -3,6 +3,8 @@ package cn.onedawn.mytrigger.triggercenter.dao.mapper;
 import cn.onedawn.mytrigger.pojo.Job;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author qingming yu
  * @version 1.0.0
@@ -19,4 +21,6 @@ public interface JobMapper {
     int remove(Long jobId);
 
     int pause(Long jobId);
+
+    List<Job> selectAllJobByAppId(Long id);
 }

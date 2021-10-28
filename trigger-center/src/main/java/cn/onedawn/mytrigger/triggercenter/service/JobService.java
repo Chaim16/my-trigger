@@ -4,6 +4,7 @@ import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.Request;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author qingming yu
@@ -25,4 +26,5 @@ public interface JobService {
 
     boolean ack(Long jobId);
 
+    List<Job> findAllJobByApp(Long id);
 }

@@ -22,4 +22,9 @@ public class AppServiceImpl implements AppService {
     public boolean register(App app) {
         return appMapper.register(app) > 0;
     }
+
+    @Override
+    public Long findAppIdByAppName(String appName) {
+        return appMapper.selectAppIdByAppName(appName);
+    }
 }

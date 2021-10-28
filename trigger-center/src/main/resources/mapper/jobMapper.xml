@@ -36,14 +36,35 @@
 
     <update id="remove" parameterType="java.lang.Long">
         update 任务
-        set remove      = 1
+        set remove = 1
         where id = #{id};
     </update>
 
     <update id="pause" parameterType="java.lang.Long">
         update 任务
-        set status      = "pause"
+        set status = "pause"
         where id = #{id};
     </update>
+
+    <resultMap id="selectJobMap" type="cn.onedawn.mytrigger.pojo.Job">
+        <result property="id" column="id"/>
+        <result property="status" column="status"/>
+        <result property="triggerTime" column="trigger_time"/>
+        <result property="remove" column="remove"/>
+        <result property="callName" column="call_name"/>
+        <result property="callData" column="call_data"/>
+        <result property="callType" column="call_type"/>
+        <result property="callHost" column="call_host"/>
+        <result property="cron" column="cron"/>
+        <result property="createTime" column="create_time"/>
+        <result property="modifyTime" column="modify_time"/>
+        <result property="app" column="app"/>
+    </resultMap>
+
+    <select id="selectAllJobByAppId" parameterType="java.lang.Long" resultMap="selectJobMap">
+        select *
+        from 任务
+        where app = #{id} and remove = 0;
+    </select>
 
 </mapper>

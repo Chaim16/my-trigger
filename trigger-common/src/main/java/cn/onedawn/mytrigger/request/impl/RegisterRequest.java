@@ -22,7 +22,7 @@ import java.util.Date;
  * @createTime 2021年10月26日 11:07:00
  */
 @Data
-public class RegisterRequest extends Request implements Serializable {
+public class RegisterRequest extends Request {
     @JSONField(name = "type")
     private RequestType type = RequestType.register;
 

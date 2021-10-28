@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author qingming yu
@@ -104,5 +105,10 @@ public class JobServiceImpl implements JobService {
     @Override
     public boolean ack(Long jobId) {
         return false;
+    }
+
+    @Override
+    public List<Job> findAllJobByApp(Long id) {
+        return jobMapper.selectAllJobByAppId(id);
     }
 }

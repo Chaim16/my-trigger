@@ -12,23 +12,23 @@ import lombok.Data;
 /**
  * @author qingming yu
  * @version 1.0.0
- * @ClassName RemoveRequest.java
+ * @ClassName CommonRequest.java
  * @Description TODO
- * @createTime 2021年10月27日 19:40:00
+ * @createTime 2021年10月28日 11:25:00
  */
 @Data
-public class RemoveRequest extends Request {
+public class CommonRequest extends Request {
     @JSONField(name = "type")
-    private RequestType type = RequestType.remove;
+    private RequestType type = RequestType.common;
 
-    @JSONField(name = "jobId")
-    private Long jobId;
+    @JSONField(name = "job")
+    private Job job;
 
-    @JSONField(name = "appId")
-    private Long appId;
+    @JSONField(name = "app")
+    private App app;
 
-    @JSONField(name = "userId")
-    private Long userId;
+    @JSONField(name = "user")
+    private User user;
 
     @Override
     public void check() throws MyTriggerException {

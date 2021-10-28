@@ -13,4 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AppMapper {
     int register(App app);
+
+    Long selectAppIdByAppName(String appName);
 }

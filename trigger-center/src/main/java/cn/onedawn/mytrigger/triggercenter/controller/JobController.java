@@ -1,9 +1,9 @@
 package cn.onedawn.mytrigger.triggercenter.controller;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
+import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
-import cn.onedawn.mytrigger.request.impl.ModifyRequest;
-import cn.onedawn.mytrigger.request.impl.RegisterRequest;
+import cn.onedawn.mytrigger.request.impl.*;
 import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.type.ResponseType;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @author qingming yu
@@ -80,13 +81,12 @@ public class JobController {
         return response;
     }
 
-
     @RequestMapping("remove")
     public Response remove(HttpServletRequest request) {
         Response response = new Response();
         long start = System.currentTimeMillis();
         String requestData = request.getParameter(ConstValue.REQUEST_DATA);
-        Long jobId = JSON.parseObject(requestData, Long.class);
+        Long jobId = JSON.parseObject(requestData, RemoveRequest.class).getJobId();
         boolean result = jobService.remove(jobId);
         long end = System.currentTimeMillis();
         response.setSuccess(result)
@@ -101,7 +101,7 @@ public class JobController {
         Response response = new Response();
         long start = System.currentTimeMillis();
         String requestData = request.getParameter(ConstValue.REQUEST_DATA);
-        Long jobId = JSON.parseObject(requestData, Long.class);
+        Long jobId = JSON.parseObject(requestData, PauseRequest.class).getJobId();
         boolean result = jobService.pause(jobId);
         long end = System.currentTimeMillis();
         response.setSuccess(result)
@@ -111,5 +111,16 @@ public class JobController {
         return response;
     }
 
+    @RequestMapping("findAllJobByApp")
+    public Response findAllJob(HttpServletRequest request) {
+        Response response = new Response();
+        long start = System.currentTimeMillis();
+        String requestData = request.getParameter(ConstValue.REQUEST_DATA);
+        App app = JSON.parseObject(requestData, CommonRequest.class).getApp();
+        List<Job> jobs = jobService.findAllJobByApp(app.getId());
+        long end = System.currentTimeMillis();
+        response.setSuccess(jobs == null).setTime(end - start).setInfo(JSON.toJSONString(jobs));
+        return response;
+    }
 
 }

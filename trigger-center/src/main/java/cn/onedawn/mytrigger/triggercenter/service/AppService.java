@@ -11,4 +11,6 @@ import cn.onedawn.mytrigger.pojo.App;
  */
 public interface AppService {
     boolean register(App app);
+
+    Long findAppIdByAppName(String appName);
 }

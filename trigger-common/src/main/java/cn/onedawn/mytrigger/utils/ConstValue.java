@@ -10,4 +10,12 @@ package cn.onedawn.mytrigger.utils;
 public class ConstValue {
     public static final String REQUEST_DATA = "data";
 
+    public static final String SERVER = "127.0.0.1";
+
+    public static final String serverPort = "8080";
+
+    public static final String BASE_URL = "http://" + ConstValue.SERVER + ":" + ConstValue.serverPort;
+
+    public static final String NAMESERVADDR = "http://127.0.0.1:9876";
+
 }
