@@ -5,7 +5,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.jws.HandlerChain;
 import java.io.Serializable;
 
 /**

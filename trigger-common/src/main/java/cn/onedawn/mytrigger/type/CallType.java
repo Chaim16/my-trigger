@@ -7,17 +7,12 @@ import cn.onedawn.mytrigger.exception.MyTriggerException;
  * @version 1.0.0
  * @ClassName CallType.java
  * @Description TODO
- * @createTime 2021年10月26日 09:15:00
+ * @createTime 2021年10月29日 05:24:00
  */
 public enum CallType {
-    /**
-     * http方式
-     */
-    http("http"),
-    /**
-     * dubbo方式
-     */
-    dubbo("dubbo");
+    /** 回调方式 */
+    dubbo("dubbo"),
+    http("http");
 
     private String str;
 

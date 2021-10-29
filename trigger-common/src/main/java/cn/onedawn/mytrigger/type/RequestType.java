@@ -37,7 +37,11 @@ public enum RequestType {
     /**
      * ack应答
      */
-    ack("ack");
+    ack("ack"),
+    /**
+     * call
+     */
+    call("call");
 
     private String str;
 

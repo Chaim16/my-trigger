@@ -4,7 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>cn.onedawn.mytrigger</groupId>
+  <parent>
+    <groupId>cn.onedawn.mytrigger</groupId>
+    <artifactId>my-trigger</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
   <artifactId>trigger-common</artifactId>
   <version>1.0-SNAPSHOT</version>
 
@@ -40,6 +45,27 @@
       <groupId>org.apache.rocketmq</groupId>
       <artifactId>rocketmq-client</artifactId>
       <version>4.9.2</version>
+    </dependency>
+    <!-- spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.dubbo</groupId>
+      <artifactId>dubbo</artifactId>
+      <version>${dubbo.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

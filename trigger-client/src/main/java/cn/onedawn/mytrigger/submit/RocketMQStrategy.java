@@ -27,7 +27,7 @@ public class RocketMQStrategy {
 
     private static DefaultMQProducer producer;
 
-    static {
+    public void init() {
         producer = new DefaultMQProducer("my_trigger");
         producer.setNamesrvAddr(ConstValue.NAMESERVADDR);
         try {
@@ -36,7 +36,6 @@ public class RocketMQStrategy {
             e.printStackTrace();
         }
     }
-
 
     public static boolean submit(Job job) throws MQClientException, UnsupportedEncodingException, MQBrokerException, RemotingException, InterruptedException {
         RegisterRequest registerRequest = new RegisterRequest();
@@ -69,6 +68,4 @@ public class RocketMQStrategy {
     public static void close(){
         producer.shutdown();
     }
-
-
 }

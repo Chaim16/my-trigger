@@ -2,6 +2,7 @@ package cn.onedawn.mytrigger;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import cn.onedawn.mytrigger.call.DubboCallServiceListener;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
@@ -11,7 +12,6 @@ import cn.onedawn.mytrigger.request.impl.RemoveRequest;
 import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.submit.HTTPStrategy;
 import cn.onedawn.mytrigger.submit.RocketMQStrategy;
-import cn.onedawn.mytrigger.type.AckType;
 import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.SubmitType;
 import cn.onedawn.mytrigger.utils.ConstValue;
@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public class MyTriggerClient {
 
+    public static DubboCallServiceListener dubboCallServiceListener;
+    public static RocketMQStrategy rocketMQStrategy;
     /**
      * 提交策略，默认使用MQ提交
      */
@@ -44,13 +46,7 @@ public class MyTriggerClient {
      * 回调方式，默认通过dubbo
      */
     private CallType callType = CallType.dubbo;
-    /**
-     * ack方式，默认通过mq
-     */
-    private AckType ackType = AckType.mq;
-
     private App app;
-
     private boolean closed;
 
     /**
@@ -71,6 +67,13 @@ public class MyTriggerClient {
         } else {
             throw new MyTriggerException("find appId faild");
         }
+
+        dubboCallServiceListener = new DubboCallServiceListener();
+        dubboCallServiceListener.init();
+
+        rocketMQStrategy = new RocketMQStrategy();
+        rocketMQStrategy.init();
+
         closed = false;
     }
 
@@ -154,7 +157,6 @@ public class MyTriggerClient {
         myTriggerClient.init("543");
 //        myTriggerClient.setSubmitType(SubmitType.HTTP);
         System.out.println(myTriggerClient.register("* * * * * ?", "call1", "123"));
-//        System.out.println(myTriggerClient.remove(4L));
         System.out.println(myTriggerClient.getAllJob());
     }
 
@@ -175,19 +177,12 @@ public class MyTriggerClient {
         this.callType = callType;
     }
 
-    public AckType getAckType() {
-        return ackType;
-    }
-
-    public void setAckType(AckType ackType) {
-        this.ackType = ackType;
-    }
-
     public boolean isClosed() {
         return closed;
     }
 
     public void setClosed(boolean closed) {
+        RocketMQStrategy.close();
         this.closed = closed;
     }
 }
