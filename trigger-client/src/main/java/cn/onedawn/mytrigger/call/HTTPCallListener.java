@@ -3,6 +3,7 @@ package cn.onedawn.mytrigger.call;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.server.SimpleServer;
 import cn.onedawn.mytrigger.utils.ConstValue;
+
 import java.io.IOException;
 
 /**
@@ -18,7 +19,7 @@ public class HTTPCallListener {
 
     public void init() throws IOException {
         server = HttpUtil.createServer(Integer.parseInt(ConstValue.HTTPCALL_SERVER_PORT));
-        server.addHandler("/call", new HTTPCallHandler())
+        server.addAction("/call", new HTTPCallAction())
                 .start();
     }
 

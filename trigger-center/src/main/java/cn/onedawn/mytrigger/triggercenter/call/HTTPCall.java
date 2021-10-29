@@ -25,18 +25,16 @@ public class HTTPCall {
 
     public static Response call(CallRequest callRequest) {
         Response response = new Response();
-
         Map<String, Object> formMap = new HashMap<>();
         formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(callRequest));
         String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTPCALL_SERVER_PORT + "/call";
 
-        System.out.println(url);
         long start = System.currentTimeMillis();
+//        String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTPCALL_SERVER_PORT;
         HttpResponse execute = HttpRequest.post(url)
-                .form(formMap)
+//                .form(formMap)
                 .contentType("multipart/form-data;charset=utf-8")
                 .timeout(3000)
-                .setMaxRedirectCount(0)
                 .execute();
         long end = System.currentTimeMillis();
 
