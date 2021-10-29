@@ -7,6 +7,7 @@ import cn.onedawn.mytrigger.request.Request;
 import cn.onedawn.mytrigger.type.RequestType;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author qingming yu
@@ -16,6 +17,7 @@ import lombok.Data;
  * @createTime 2021年10月29日 03:57:00
  */
 @Data
+@Accessors(chain = true)
 public class CallRequest extends Request {
     @JSONField(name = "type")
     private RequestType type = RequestType.call;

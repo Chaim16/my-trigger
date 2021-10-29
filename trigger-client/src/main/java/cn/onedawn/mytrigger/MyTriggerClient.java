@@ -3,6 +3,7 @@ package cn.onedawn.mytrigger;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.onedawn.mytrigger.call.DubboCallServiceListener;
+import cn.onedawn.mytrigger.call.HTTPCallListener;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
@@ -21,6 +22,7 @@ import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +40,7 @@ public class MyTriggerClient {
 
     public static DubboCallServiceListener dubboCallServiceListener;
     public static RocketMQStrategy rocketMQStrategy;
+    public static HTTPCallListener httpCallListener;
     /**
      * 提交策略，默认使用MQ提交
      */
@@ -46,6 +49,8 @@ public class MyTriggerClient {
      * 回调方式，默认通过dubbo
      */
     private CallType callType = CallType.dubbo;
+    private String callHost;
+
     private App app;
     private boolean closed;
 
@@ -56,10 +61,11 @@ public class MyTriggerClient {
      * @param appName 应用名
      * @throws MyTriggerException 如果appName对应的appId不存在，抛出异常
      */
-    public void init(String appName) throws MyTriggerException {
+    public void init(String appName) throws MyTriggerException, IOException {
         // 查询appId
         String url = ConstValue.BASE_URL + "/app/findAppIdByAppName?appName=" + appName;
         HttpResponse response = HttpRequest.get(url).timeout(5000).execute();
+
         if (response.getStatus() == StatusCode.SUCCESS) {
             String body = response.body();
             app = new App();
@@ -68,11 +74,17 @@ public class MyTriggerClient {
             throw new MyTriggerException("find appId faild");
         }
 
+        if (callType == CallType.http) {
+            if (callHost == null || callHost.trim().length() == 0) {
+                throw new MyTriggerException("callhost is empty");
+            }
+        }
+
         dubboCallServiceListener = new DubboCallServiceListener();
         dubboCallServiceListener.init();
-
         rocketMQStrategy = new RocketMQStrategy();
         rocketMQStrategy.init();
+        httpCallListener.init();
 
         closed = false;
     }
@@ -152,7 +164,7 @@ public class MyTriggerClient {
         return jobs;
     }
 
-    public static void main(String[] args) throws MyTriggerException, MQBrokerException, RemotingException, UnsupportedEncodingException, InterruptedException, MQClientException {
+    public static void main(String[] args) throws MyTriggerException, MQBrokerException, RemotingException, IOException, InterruptedException, MQClientException {
         MyTriggerClient myTriggerClient = new MyTriggerClient();
         myTriggerClient.init("543");
 //        myTriggerClient.setSubmitType(SubmitType.HTTP);
@@ -175,6 +187,14 @@ public class MyTriggerClient {
 
     public void setCallType(CallType callType) {
         this.callType = callType;
+    }
+
+    public String getCallHost() {
+        return callHost;
+    }
+
+    public void setCallHost(String callHost) {
+        this.callHost = callHost;
     }
 
     public boolean isClosed() {

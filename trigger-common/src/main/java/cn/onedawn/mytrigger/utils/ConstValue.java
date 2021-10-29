@@ -23,4 +23,5 @@ public class ConstValue {
     public static final String DUBBO_PROTOCOL = "dubbo";
     public static final int DUBBO_PROTOCOL_PORT = 21816;
 
+    public static final String HTTPCALL_SERVER_PORT = "9090";
 }

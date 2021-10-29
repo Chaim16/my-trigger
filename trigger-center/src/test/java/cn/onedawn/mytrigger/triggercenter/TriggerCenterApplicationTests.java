@@ -1,12 +1,17 @@
 package cn.onedawn.mytrigger.triggercenter;
 
 import cn.hutool.http.HttpRequest;
+import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
+import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.request.impl.RegisterRequest;
+import cn.onedawn.mytrigger.response.Response;
+import cn.onedawn.mytrigger.triggercenter.call.HTTPCall;
 import cn.onedawn.mytrigger.type.CallType;
 import com.alibaba.fastjson.JSON;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +38,11 @@ class TriggerCenterApplicationTests {
                 .execute()
                 .body();
         System.out.println(body);
+    }
+
+    @Test
+    void httpCallTest() {
+
     }
 
 }
