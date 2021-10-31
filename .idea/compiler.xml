@@ -14,11 +14,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="my-trigger" target="8" />
-      <module name="trigger-admin" target="8" />
+      <module name="my-trigger" target="1.5" />
+      <module name="trigger-admin" target="1.8" />
       <module name="trigger-center" target="8" />
-      <module name="trigger-client" target="8" />
-      <module name="trigger-common" target="8" />
+      <module name="trigger-client" target="1.8" />
+      <module name="trigger-common" target="6" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

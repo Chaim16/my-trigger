@@ -14,14 +14,14 @@ public class ConstValue {
     public static final String SERVER_PORT = "8080";
     public static final String BASE_URL = "http://" + ConstValue.SERVER + ":" + ConstValue.SERVER_PORT;
 
-    public static final String NAMESERVADDR = "http://127.0.0.1:9876";
+    public static final String NAMESERVADDR = "http://192.168.4.103:9876";
 
-    public static final String ZOOKEEPER_ADDRESS = "http://127.0.0.1:2181";
+    public static final String ZOOKEEPER_ADDRESS = "192.168.4.103:2181";
     public static final String ZOOKEEPER_USER = "root";
     public static final String ZOOKEEPER_PASSWORD = "123456";
 
     public static final String DUBBO_PROTOCOL = "dubbo";
-    public static final int DUBBO_PROTOCOL_PORT = 21816;
+    public static final int DUBBO_PROTOCOL_PORT = 21886;
 
     public static final String HTTPCALL_SERVER_PORT = "9090";
 }

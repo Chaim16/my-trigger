@@ -9,6 +9,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * @author qingming yu
  * @version 1.0.0
@@ -18,7 +20,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class CallRequest extends Request {
+public class CallRequest extends Request implements Serializable {
     @JSONField(name = "type")
     private RequestType type = RequestType.call;
 

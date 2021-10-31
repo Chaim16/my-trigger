@@ -68,8 +68,9 @@ public class MyTriggerClient {
 
         if (response.getStatus() == StatusCode.SUCCESS) {
             String body = response.body();
-            app = new App();
-            app.setId(Long.valueOf(body));
+            app = new App()
+                    .setAppName(appName)
+                    .setId(Long.valueOf(body));
         } else {
             throw new MyTriggerException("find appId faild");
         }
@@ -84,6 +85,7 @@ public class MyTriggerClient {
         dubboCallServiceListener.init();
         rocketMQStrategy = new RocketMQStrategy();
         rocketMQStrategy.init();
+        httpCallListener = new HTTPCallListener();
         httpCallListener.init();
 
         closed = false;

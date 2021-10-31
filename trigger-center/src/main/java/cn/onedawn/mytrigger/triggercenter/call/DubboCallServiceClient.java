@@ -6,6 +6,7 @@ import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.utils.ConstValue;
+import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.springframework.stereotype.Component;
@@ -22,21 +23,26 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class DubboCallServiceClient {
 
-    private ReferenceConfig<CallHandler> referenceConfig;
+    private ReferenceConfig<DubboService> referenceConfig;
     private RegistryConfig registryConfig;
+    private ApplicationConfig applicationConfig;
 
     /* <appName, callHandler> */
-    private volatile ConcurrentHashMap<String, CallHandler> callHandlerMap = new ConcurrentHashMap<>();
+    private volatile ConcurrentHashMap<String, DubboService> callHandlerMap = new ConcurrentHashMap<>();
 
     private static final Object callHandlerMapLock = new Object();
 
     public synchronized ReferenceConfig getReferenceConfig() {
+        applicationConfig = new ApplicationConfig("my-trigger-center");
+
         registryConfig = new RegistryConfig();
         registryConfig.setAddress(ConstValue.ZOOKEEPER_ADDRESS);
-        registryConfig.setUsername(ConstValue.ZOOKEEPER_USER);
-        registryConfig.setUsername(ConstValue.ZOOKEEPER_PASSWORD);
+        registryConfig.setProtocol("zookeeper");
+        registryConfig.setTimeout(10000);
 
-        referenceConfig = new ReferenceConfig();
+        referenceConfig = new ReferenceConfig<DubboService>();
+        referenceConfig.setApplication(applicationConfig);
+        referenceConfig.setProtocol(ConstValue.DUBBO_PROTOCOL);
         referenceConfig.setInterface(DubboService.class);
         referenceConfig.setRegistry(registryConfig);
         referenceConfig.setVersion("1.0.0");
@@ -46,8 +52,8 @@ public class DubboCallServiceClient {
     }
 
     public Response callback(CallRequest callRequest) throws MyTriggerException {
-        ReferenceConfig<CallHandler> referenceConfig = getReferenceConfig();
-        CallHandler callbackService = null;
+        ReferenceConfig<DubboService> referenceConfig = getReferenceConfig();
+        DubboService callbackService = null;
         callbackService = getCallHandler(referenceConfig, callRequest.getApp());
         if (callbackService != null) {
             return callbackService.handle(callRequest);
@@ -56,7 +62,7 @@ public class DubboCallServiceClient {
         }
     }
 
-    private CallHandler getCallHandler(ReferenceConfig<CallHandler> referenceConfig, App app) {
+    private DubboService getCallHandler(ReferenceConfig<DubboService> referenceConfig, App app) {
         if (callHandlerMap.containsKey(app.getAppName())) {
             return callHandlerMap.get(app.getAppName());
         }
@@ -64,10 +70,17 @@ public class DubboCallServiceClient {
             if (callHandlerMap.containsKey(app.getAppName())) {
                 return callHandlerMap.get(app.getAppName());
             }
-            CallHandler callHandler = referenceConfig.get();
-            callHandlerMap.put(app.getAppName(), callHandler);
-            return callHandler;
+            DubboService dubboService = referenceConfig.get();
+            callHandlerMap.put(app.getAppName(), dubboService);
+            return dubboService;
         }
+    }
+
+    public static void main(String[] args) {
+        DubboCallServiceClient client = new DubboCallServiceClient();
+        DubboService dubboService = (DubboService) client.getReferenceConfig().get();
+        System.out.println(dubboService.getClass().getName());
+        System.out.println("--------------------");
     }
 
 }

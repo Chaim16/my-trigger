@@ -2,6 +2,7 @@ package cn.onedawn.mytrigger.call;
 
 import cn.onedawn.mytrigger.api.DubboService;
 import cn.onedawn.mytrigger.utils.ConstValue;
+import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
@@ -17,16 +18,22 @@ public class DubboCallServiceListener {
 
     private RegistryConfig registryConfig;
     private ServiceConfig<DubboService> serviceConfig;
+    private ApplicationConfig applicationConfig;
+    private ProtocolConfig protocolConfig;
 
     public void init() {
         registryConfig = new RegistryConfig();
         registryConfig.setAddress(ConstValue.ZOOKEEPER_ADDRESS);
-        registryConfig.setUsername(ConstValue.ZOOKEEPER_USER);
-        registryConfig.setPassword(ConstValue.ZOOKEEPER_PASSWORD);
+        registryConfig.setProtocol("zookeeper");
+        registryConfig.setTimeout(10000);
+
+        protocolConfig = new ProtocolConfig(ConstValue.DUBBO_PROTOCOL, ConstValue.DUBBO_PROTOCOL_PORT);
+        applicationConfig = new ApplicationConfig("my-trigger-client");
 
         serviceConfig = new ServiceConfig<DubboService>();
+        serviceConfig.setApplication(applicationConfig);
         serviceConfig.setRegistry(registryConfig);
-        serviceConfig.setProtocol(new ProtocolConfig(ConstValue.DUBBO_PROTOCOL, ConstValue.DUBBO_PROTOCOL_PORT));
+        serviceConfig.setProtocol(protocolConfig);
         serviceConfig.setInterface(DubboService.class);
         serviceConfig.setRef(new DubboCallServiceImpl());
         serviceConfig.setVersion("1.0.0");
