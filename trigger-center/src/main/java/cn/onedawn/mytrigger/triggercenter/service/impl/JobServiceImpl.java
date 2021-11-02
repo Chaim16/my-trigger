@@ -2,8 +2,9 @@ package cn.onedawn.mytrigger.triggercenter.service.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.Job;
-import cn.onedawn.mytrigger.triggercenter.dao.mapper.JobMapper;
+import cn.onedawn.mytrigger.triggercenter.mapper.JobMapper;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
+import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.CronUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,5 +111,10 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> findAllJobByApp(Long id) {
         return jobMapper.selectAllJobByAppId(id);
+    }
+
+    @Override
+    public int updateStatusByJobId(Long id, JobStatusType status) {
+        return jobMapper.updateStatusByJobId(id, status);
     }
 }

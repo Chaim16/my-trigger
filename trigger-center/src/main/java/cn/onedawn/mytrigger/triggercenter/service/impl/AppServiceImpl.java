@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.service.impl;
 
 import cn.onedawn.mytrigger.pojo.App;
-import cn.onedawn.mytrigger.triggercenter.dao.mapper.AppMapper;
+import cn.onedawn.mytrigger.triggercenter.mapper.AppMapper;
 import cn.onedawn.mytrigger.triggercenter.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -19,23 +19,25 @@ public class SpringBeanFactory implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
-    //通过name获取 Bean.
-    public static Object getBean(String name) {
-        return applicationContext.getBean(name);
-    }
-
-    //通过class获取Bean.
-    public static <T> T getBean(Class<T> clazz) {
-        return applicationContext.getBean(clazz);
-    }
-
-    //通过name,以及Clazz返回指定的Bean
-    public static <T> T getBean(String name, Class<T> clazz) {
-        return applicationContext.getBean(name, clazz);
-    }
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringBeanFactory.applicationContext = applicationContext;
     }
+
+    public static Object getBean(String name) {
+        return applicationContext.getBean(name);
+    }
+
+    public static <T> T getBean(Class<T> clazz) {
+        return applicationContext.getBean(clazz);
+    }
+
+    public static <T> T getBean(String name, Class<T> clazz) {
+        return applicationContext.getBean(name, clazz);
+    }
+
+    public static <T> T getBeanByType(Class<T> clazz) {
+        return applicationContext.getBean(clazz);
+    }
+
 }

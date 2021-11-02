@@ -21,11 +21,9 @@ public class DubboCallServiceImpl implements DubboService {
         long start = System.currentTimeMillis();
         Job job = callRequest.getJob();
         String callName = job.getCallName();
-        System.out.println("callName   :    " + callName);
         Task task = (Task) SpringBeanFactory.getBean(callName);
         ExecuteAndAck executeAndAck = new ExecuteAndAck(task, callRequest);
         TaskExecutor.submit(executeAndAck);
-
         long end = System.currentTimeMillis();
         return new Response().setSuccess(true).setTime(end - start);
     }

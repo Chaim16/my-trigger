@@ -1,6 +1,7 @@
 package cn.onedawn.mytrigger.pojo;
 
 import cn.onedawn.mytrigger.type.CallType;
+import cn.onedawn.mytrigger.type.JobStatusType;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -21,7 +22,7 @@ public class Job implements Serializable {
     private Long id;
 
     @JSONField(name = "status")
-    private String status;
+    private JobStatusType status;
 
     @JSONField(name = "triggerTime")
     private String triggerTime;

@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/trigger-admin/pom.xml" />
+        <option value="$PROJECT_DIR$/trigger-test/pom.xml" />
       </list>
     </option>
   </component>

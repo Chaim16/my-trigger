@@ -14,6 +14,7 @@ import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.submit.HTTPStrategy;
 import cn.onedawn.mytrigger.submit.RocketMQStrategy;
 import cn.onedawn.mytrigger.type.CallType;
+import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.type.SubmitType;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.StatusCode;
@@ -101,7 +102,7 @@ public class MyTriggerClient {
      */
     public boolean register(String cron, String callName, String callData) throws MQBrokerException, RemotingException, UnsupportedEncodingException, InterruptedException, MQClientException {
         Job job = new Job();
-        job.setStatus("wait")
+        job.setStatus(JobStatusType.wait)
                 .setRemove((byte) 0)
                 .setCallName(callName)
                 .setCallData(callData)

@@ -1,6 +1,7 @@
-package cn.onedawn.mytrigger.triggercenter.dao.mapper;
+package cn.onedawn.mytrigger.triggercenter.mapper;
 
 import cn.onedawn.mytrigger.pojo.Job;
+import cn.onedawn.mytrigger.type.JobStatusType;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface JobMapper {
     int pause(Long jobId);
 
     List<Job> selectAllJobByAppId(Long id);
+
+    int updateStatusByJobId(Long id, JobStatusType status);
 }

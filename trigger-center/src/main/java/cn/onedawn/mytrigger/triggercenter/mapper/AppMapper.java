@@ -1,4 +1,4 @@
-package cn.onedawn.mytrigger.triggercenter.dao.mapper;
+package cn.onedawn.mytrigger.triggercenter.mapper;
 
 import cn.onedawn.mytrigger.pojo.App;
 import org.apache.ibatis.annotations.Mapper;

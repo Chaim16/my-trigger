@@ -3,6 +3,7 @@ package cn.onedawn.mytrigger;
 import static org.junit.Assert.assertTrue;
 
 import cn.onedawn.mytrigger.call.HTTPCallListener;
+import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import org.apache.dubbo.config.*;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class AppTest {
 
     @Test
     public void shouldAnswerWithTrue() {
-        assertTrue(true);
+
     }
 
     @Test
@@ -45,4 +46,6 @@ public class AppTest {
         serviceConfig.export();
         System.out.println("end");
     }
+
+
 }

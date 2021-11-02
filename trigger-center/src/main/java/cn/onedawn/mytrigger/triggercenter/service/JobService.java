@@ -2,6 +2,9 @@ package cn.onedawn.mytrigger.triggercenter.service;
 
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.Request;
+import cn.onedawn.mytrigger.type.JobStatusType;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.List;
  * @Description TODO
  * @createTime 2021年10月26日 10:20:00
  */
+@Component
 public interface JobService {
     boolean register(Job job) throws ParseException;
 
@@ -27,4 +31,6 @@ public interface JobService {
     boolean ack(Long jobId);
 
     List<Job> findAllJobByApp(Long id);
+
+    int updateStatusByJobId(Long id, JobStatusType status);
 }

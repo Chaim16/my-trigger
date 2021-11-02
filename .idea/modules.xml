@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/trigger-center/trigger-center.iml" filepath="$PROJECT_DIR$/trigger-center/trigger-center.iml" />
       <module fileurl="file://$PROJECT_DIR$/trigger-client/trigger-client.iml" filepath="$PROJECT_DIR$/trigger-client/trigger-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/trigger-common/trigger-common.iml" filepath="$PROJECT_DIR$/trigger-common/trigger-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/trigger-test/trigger-test.iml" filepath="$PROJECT_DIR$/trigger-test/trigger-test.iml" />
     </modules>
   </component>
 </project>
