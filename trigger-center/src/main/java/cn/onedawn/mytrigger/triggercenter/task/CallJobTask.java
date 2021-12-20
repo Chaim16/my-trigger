@@ -2,9 +2,7 @@ package cn.onedawn.mytrigger.triggercenter.task;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
@@ -16,10 +14,8 @@ import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import cn.onedawn.mytrigger.utils.StatusCode;
 import com.alibaba.fastjson.JSON;
-import org.springframework.context.annotation.Bean;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Callable;
 

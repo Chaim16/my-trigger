@@ -1,0 +1,11 @@
+cn\onedawn\mytrigger\triggercenter\controller\JobController.class
+cn\onedawn\mytrigger\triggercenter\service\JobService.class
+cn\onedawn\mytrigger\triggercenter\service\AppService.class
+cn\onedawn\mytrigger\triggercenter\controller\RocketMQConsumer$1.class
+cn\onedawn\mytrigger\triggercenter\call\HTTPCall.class
+cn\onedawn\mytrigger\triggercenter\controller\AppController.class
+cn\onedawn\mytrigger\triggercenter\service\impl\JobServiceImpl.class
+cn\onedawn\mytrigger\triggercenter\TriggerCenterApplication.class
+cn\onedawn\mytrigger\triggercenter\call\DubboCallServiceClient.class
+cn\onedawn\mytrigger\triggercenter\controller\RocketMQConsumer.class
+cn\onedawn\mytrigger\triggercenter\service\impl\AppServiceImpl.class

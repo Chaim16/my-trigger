@@ -1,5 +1,6 @@
 package cn.onedawn.mytrigger.call;
 
+import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.http.server.HttpServerRequest;
 import cn.hutool.http.server.HttpServerResponse;
 import cn.hutool.http.server.action.Action;
@@ -10,6 +11,7 @@ import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import com.alibaba.fastjson.JSON;
+import lombok.SneakyThrows;
 
 
 /**
@@ -21,11 +23,12 @@ import com.alibaba.fastjson.JSON;
  */
 public class HTTPCallAction implements Action {
 
+    @SneakyThrows
     @Override
     public void doAction(HttpServerRequest request, HttpServerResponse response) {
-        String requestData = request.getParam(ConstValue.REQUEST_DATA);
+        CallRequest callRequest = JSON.parseObject(request.getBody(), CallRequest.class);
+        callRequest.check();
 
-        CallRequest callRequest = JSON.parseObject(requestData, CallRequest.class);
         Job job = callRequest.getJob();
         String callName = job.getCallName();
 

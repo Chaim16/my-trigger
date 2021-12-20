@@ -39,6 +39,7 @@ public class RocketMQConsumer implements InitializingBean {
         consumer.setNamesrvAddr(ConstValue.NAMESERVADDR);
         try {
             consumer.subscribe("job", "register || ack");
+
             consumer.registerMessageListener(new MessageListenerConcurrently() {
                 @SneakyThrows
                 @Override
@@ -57,10 +58,11 @@ public class RocketMQConsumer implements InitializingBean {
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }
             });
+
             consumer.start();
         } catch (MQClientException e) {
             e.printStackTrace();
         }
-        System.out.printf("RocketMQ Consumer Started.");
+        System.out.println("RocketMQ Consumer Started.");
     }
 }

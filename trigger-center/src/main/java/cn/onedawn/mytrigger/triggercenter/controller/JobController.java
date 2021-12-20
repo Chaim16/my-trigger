@@ -51,6 +51,7 @@ public class JobController {
             throw new MyTriggerException("[register job] faild");
         }
         long end = System.currentTimeMillis();
+
         response.setSuccess(result)
                 .setInfo(JSON.toJSONString(job))
                 .setType(ResponseType.register)
@@ -69,11 +70,13 @@ public class JobController {
             ModifyRequest modifyRequest = JSON.parseObject(requestData, ModifyRequest.class);
             modifyRequest.check();
             job = modifyRequest.getJob();
+
             result = jobService.modify(job);
         } catch (MyTriggerException e) {
             throw new MyTriggerException("[modify] job faild");
         }
         long end = System.currentTimeMillis();
+
         response.setSuccess(result)
                 .setInfo(JSON.toJSONString(job))
                 .setType(ResponseType.modify)
@@ -82,13 +85,18 @@ public class JobController {
     }
 
     @RequestMapping("remove")
-    public Response remove(HttpServletRequest request) {
+    public Response remove(HttpServletRequest request) throws MyTriggerException {
         Response response = new Response();
         long start = System.currentTimeMillis();
         String requestData = request.getParameter(ConstValue.REQUEST_DATA);
-        Long jobId = JSON.parseObject(requestData, RemoveRequest.class).getJobId();
+
+        RemoveRequest removeRequest = JSON.parseObject(requestData, RemoveRequest.class);
+        removeRequest.check();
+        Long jobId = removeRequest.getJobId();
+
         boolean result = jobService.remove(jobId);
         long end = System.currentTimeMillis();
+
         response.setSuccess(result)
                 .setInfo(null)
                 .setType(ResponseType.remove)
@@ -97,16 +105,21 @@ public class JobController {
     }
 
     @RequestMapping("pause")
-    public Response pause(HttpServletRequest request) {
+    public Response pause(HttpServletRequest request) throws MyTriggerException {
         Response response = new Response();
         long start = System.currentTimeMillis();
         String requestData = request.getParameter(ConstValue.REQUEST_DATA);
-        Long jobId = JSON.parseObject(requestData, PauseRequest.class).getJobId();
+
+        PauseRequest pauseRequest = JSON.parseObject(requestData, PauseRequest.class);
+        pauseRequest.check();
+
+        Long jobId = pauseRequest.getJobId();
         boolean result = jobService.pause(jobId);
         long end = System.currentTimeMillis();
+
         response.setSuccess(result)
                 .setInfo(null)
-                .setType(ResponseType.remove)
+                .setType(ResponseType.pause)
                 .setTime(end - start);
         return response;
     }
@@ -119,7 +132,10 @@ public class JobController {
         App app = JSON.parseObject(requestData, CommonRequest.class).getApp();
         List<Job> jobs = jobService.findAllJobByApp(app.getId());
         long end = System.currentTimeMillis();
-        response.setSuccess(jobs == null).setTime(end - start).setInfo(JSON.toJSONString(jobs));
+
+        response.setSuccess(jobs == null)
+                .setTime(end - start)
+                .setInfo(JSON.toJSONString(jobs));
         return response;
     }
 

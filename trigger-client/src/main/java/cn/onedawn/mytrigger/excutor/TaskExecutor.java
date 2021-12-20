@@ -1,6 +1,7 @@
 package cn.onedawn.mytrigger.excutor;
 
-import cn.onedawn.mytrigger.excutor.reject.DiscardAndMessagePolicy;
+import cn.onedawn.mytrigger.threadpool.DiscardAndMessagePolicy;
+import cn.onedawn.mytrigger.threadpool.NamedThreadFactory;
 
 import java.util.concurrent.*;
 
@@ -16,7 +17,7 @@ public class TaskExecutor {
     private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
             50, 100, 60, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(5000),
-            new ThreadFactoryImpl("my_trigger"),
+            new NamedThreadFactory("my_trigger"),
             new DiscardAndMessagePolicy());
 
     public static void submit(Runnable task) {

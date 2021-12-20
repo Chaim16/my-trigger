@@ -6,8 +6,13 @@ import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.Request;
 import cn.onedawn.mytrigger.type.RequestType;
+import cn.onedawn.mytrigger.utils.CronUtil;
+import cn.onedawn.mytrigger.utils.NumberUtils;
+import cn.onedawn.mytrigger.utils.StringUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author qingming yu
@@ -24,15 +29,9 @@ public class RemoveRequest extends Request {
     @JSONField(name = "jobId")
     private Long jobId;
 
-    @JSONField(name = "appId")
-    private Long appId;
-
-    @JSONField(name = "userId")
-    private Long userId;
-
     @Override
     public void check() throws MyTriggerException {
-
+        NumberUtils.isValidLong(String.valueOf(jobId), "jobId isn't valid Long");
     }
 
     @Override

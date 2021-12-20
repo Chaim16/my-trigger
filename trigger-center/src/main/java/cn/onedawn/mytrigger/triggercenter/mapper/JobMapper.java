@@ -26,4 +26,6 @@ public interface JobMapper {
     List<Job> selectAllJobByAppId(Long id);
 
     int updateStatusByJobId(Long id, JobStatusType status);
+
+    List<Job> selectTriggerJob(String sql);
 }

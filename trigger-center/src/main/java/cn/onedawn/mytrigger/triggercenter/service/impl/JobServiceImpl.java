@@ -117,4 +117,9 @@ public class JobServiceImpl implements JobService {
     public int updateStatusByJobId(Long id, JobStatusType status) {
         return jobMapper.updateStatusByJobId(id, status);
     }
+
+    @Override
+    public List<Job> selectTriggerJob(String sql) {
+        return jobMapper.selectTriggerJob(sql);
+    }
 }

@@ -25,6 +25,9 @@ public class DubboCallServiceImpl implements DubboService {
         ExecuteAndAck executeAndAck = new ExecuteAndAck(task, callRequest);
         TaskExecutor.submit(executeAndAck);
         long end = System.currentTimeMillis();
-        return new Response().setSuccess(true).setTime(end - start);
+
+        return new Response()
+                .setSuccess(true)
+                .setTime(end - start);
     }
 }

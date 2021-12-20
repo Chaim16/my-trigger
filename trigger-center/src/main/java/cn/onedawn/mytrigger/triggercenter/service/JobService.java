@@ -33,4 +33,7 @@ public interface JobService {
     List<Job> findAllJobByApp(Long id);
 
     int updateStatusByJobId(Long id, JobStatusType status);
+
+    List<Job> selectTriggerJob(String sql);
+
 }

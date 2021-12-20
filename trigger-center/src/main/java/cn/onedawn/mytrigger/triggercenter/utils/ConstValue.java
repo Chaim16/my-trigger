@@ -15,6 +15,7 @@ public class ConstValue {
     public static final String HTTP_URI_HEAD_STR = "http://";
     public static final Integer HTTP_CALL_PORT = 9090;
     public static final String HTTP_CALL_URL = "/call";
+    public static final long SCHED_TIME = 1000L;
 
     public static int TRIGGER_RETRY_COUNT = 3;
 

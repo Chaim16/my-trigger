@@ -1,6 +1,5 @@
 package cn.onedawn.mytrigger.utils;
 
-import cn.onedawn.mytrigger.cron.CronExpression;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import org.apache.commons.lang3.StringUtils;
 

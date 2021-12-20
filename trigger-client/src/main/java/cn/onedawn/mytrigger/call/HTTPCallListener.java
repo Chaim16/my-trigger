@@ -21,6 +21,7 @@ public class HTTPCallListener {
         server = HttpUtil.createServer(Integer.parseInt(ConstValue.HTTPCALL_SERVER_PORT));
         server.addAction("/call", new HTTPCallAction())
                 .start();
+        System.out.println("http call listener preapare ok");
     }
 
 }

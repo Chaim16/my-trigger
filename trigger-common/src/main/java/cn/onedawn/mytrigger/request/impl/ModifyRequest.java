@@ -5,6 +5,7 @@ import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.Request;
+import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.RequestType;
 import cn.onedawn.mytrigger.utils.CronUtil;
 import cn.onedawn.mytrigger.utils.StringUtils;
@@ -37,14 +38,21 @@ public class ModifyRequest extends Request {
     @Override
     public void check() throws MyTriggerException {
         if (job != null) {
-            StringUtils.isEmpty(String.valueOf(job.getApp()), "appId is empty");
+            StringUtils.isEmpty(String.valueOf(job.getApp()), "app is empty");
             StringUtils.isEmpty(String.valueOf(job.getCallName()), "callName is empty");
             StringUtils.isEmpty(String.valueOf(job.getCron()), "cron is empty");
-            StringUtils.isEmpty(String.valueOf(job.getCallHost()), "callHost is empty");
+            StringUtils.isEmpty(String.valueOf(job.getCallType()), "callType is empty");
+            if (job.getCallType() == CallType.http) {
+                StringUtils.isEmpty(String.valueOf(job.getCallHost()), "callHost is empty");
+            }
             Date cronDate = CronUtil.formatDateByCron(job.getCron(), System.currentTimeMillis());
             if (cronDate.getTime() < System.currentTimeMillis()) {
                 throw new MyTriggerException("cron time before current time: date:" + cronDate);
             }
+        }
+        if (app != null) {
+            StringUtils.isEmpty(String.valueOf(app.getAppName()), "appName is empty");
+            StringUtils.isEmpty(String.valueOf(app.getAppId()), "appId is empty");
         }
     }
 
