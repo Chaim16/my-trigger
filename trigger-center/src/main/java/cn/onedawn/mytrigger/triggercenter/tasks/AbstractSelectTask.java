@@ -1,9 +1,8 @@
-package cn.onedawn.mytrigger.triggercenter.task;
+package cn.onedawn.mytrigger.triggercenter.tasks;
 
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
-import com.google.common.collect.Lists;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.concurrent.Callable;

@@ -3,14 +3,13 @@ package cn.onedawn.mytrigger.triggercenter.sched;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
-import cn.onedawn.mytrigger.triggercenter.task.CallEnter;
+import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -23,13 +22,15 @@ import java.util.concurrent.Future;
  * @createTime 2021年11月02日 18:08:00
  */
 @Service
+@DependsOn("beanService")
 public class TriggerJob {
 
-    @Autowired
     private JobService jobService;
     private static final long schedTime = ConstValue.SCHED_TIME;
 
-/*    public TriggerJob() {
+    public TriggerJob() {
+        jobService = SpringBeanFactory.getBeanByType(JobService.class);
+
         Runnable runnable = new Runnable() {
             @SneakyThrows
             @Override
@@ -39,6 +40,7 @@ public class TriggerJob {
                         long start = System.currentTimeMillis();
                         processCore();
                         long end = System.currentTimeMillis();
+
                         long sleepTime = schedTime - (end - start);
                         if (sleepTime > 0) {
                           Thread.sleep(sleepTime);
@@ -49,6 +51,11 @@ public class TriggerJob {
                 }
             }
 
+            /**
+             * 获取任务并执行
+             * @throws ExecutionException
+             * @throws InterruptedException
+             */
             private void processCore() throws ExecutionException, InterruptedException {
                 do {
                     long start = System.currentTimeMillis();
@@ -76,5 +83,5 @@ public class TriggerJob {
         Thread triggerThread = new Thread(runnable);
         triggerThread.setDaemon(true);
         triggerThread.start();
-    }*/
+    }
 }

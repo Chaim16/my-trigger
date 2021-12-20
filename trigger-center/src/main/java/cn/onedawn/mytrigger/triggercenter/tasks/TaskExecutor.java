@@ -1,4 +1,4 @@
-package cn.onedawn.mytrigger.triggercenter.task;
+package cn.onedawn.mytrigger.triggercenter.tasks;
 
 
 import cn.onedawn.mytrigger.threadpool.DiscardAndMessagePolicy;

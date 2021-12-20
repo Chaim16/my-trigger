@@ -55,6 +55,7 @@ public class DubboCallServiceClient {
         ReferenceConfig<DubboService> referenceConfig = getReferenceConfig();
         DubboService callbackService = null;
         callbackService = getCallHandler(referenceConfig, callRequest.getApp());
+
         if (callbackService != null) {
             return callbackService.handle(callRequest);
         } else {

@@ -1,14 +1,19 @@
+server:
+  port: 8080
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mytrigger?useUnicode=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=true
     username: root
     password: 123456
-server:
-  port: 8080
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: cn.onedawn.mytrigger.triggercenter.dao.mapper
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: D:/logs/my-trigger

@@ -9,8 +9,6 @@ import cn.onedawn.mytrigger.utils.StatusCode;
 import com.alibaba.fastjson.JSON;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author qingming yu
@@ -23,7 +21,6 @@ public class HTTPCall {
 
     public static Response call(CallRequest callRequest) {
         Response response = new Response();
-
         String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTPCALL_SERVER_PORT + "/call";
 
         long start = System.currentTimeMillis();
@@ -38,25 +35,5 @@ public class HTTPCall {
         response.setTime(end - start);
         return response;
     }
-
-/*    public static Response call(CallRequest callRequest) {
-        Response response = new Response();
-
-        Map<String, Object> formMap = new HashMap<>();
-        formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(callRequest));
-        String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTPCALL_SERVER_PORT + "/call";
-
-        long start = System.currentTimeMillis();
-        HttpResponse execute = HttpRequest.post(url)
-                .contentType("application/json;charset=utf-8")
-                .form(formMap)
-                .timeout(10000)
-                .execute();
-        long end = System.currentTimeMillis();
-
-        response.setSuccess(execute.getStatus() == StatusCode.SUCCESS);
-        response.setTime(end - start);
-        return response;
-    }*/
 
 }

@@ -1,4 +1,4 @@
-package cn.onedawn.mytrigger.triggercenter.task;
+package cn.onedawn.mytrigger.triggercenter.tasks;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -99,10 +99,12 @@ public class CallJobTask implements Callable {
         String url = ConstValue.HTTP_URI_HEAD_STR + job.getCallHost() + ":" + ConstValue.HTTP_CALL_PORT + ConstValue.HTTP_CALL_URL;
         Map<String, Object> formMap = new HashMap<>();
         formMap.put("data", JSON.toJSONString(callRequest));
+
         HttpResponse response = HttpRequest.post(url)
                 .form(formMap)
                 .contentType("multipart/form-data;charset=utf-8")
                 .execute();
+
         return response.getStatus() == StatusCode.SUCCESS;
     }
 
