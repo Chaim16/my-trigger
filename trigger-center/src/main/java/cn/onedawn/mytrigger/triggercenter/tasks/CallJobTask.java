@@ -1,19 +1,17 @@
 package cn.onedawn.mytrigger.triggercenter.tasks;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
+import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.triggercenter.call.DubboCallServiceClient;
+import cn.onedawn.mytrigger.triggercenter.call.HTTPCall;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
-import cn.onedawn.mytrigger.utils.StatusCode;
-import com.alibaba.fastjson.JSON;
 
 import java.text.ParseException;
 import java.util.*;
@@ -54,7 +52,6 @@ public class CallJobTask implements Callable {
                 if (jobService != null) {
                     jobService.updateStatusByJobId(job.getId(), JobStatusType.callerror);
                     job.setStatus(JobStatusType.callerror);
-                    // 插入历史
                 }
             }
         }
@@ -62,24 +59,18 @@ public class CallJobTask implements Callable {
     }
 
     private void doCall(Job job) throws ParseException, MyTriggerException {
-/*
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new SimpleDateFormat("yyyy-HH-dd hh:mm:ss").parse(job.getTriggerTime()));
-        Long triggerTime = calendar.getTimeInMillis();
-        long delay = System.currentTimeMillis() - triggerTime;
-*/
-
-        jobService.remove(job.getId());
-        int updateCount = jobService.updateStatusByJobId(job.getId(), JobStatusType.run);
+        App app = jobService.findAppById(job.getApp());
+        jobService.updateStatusByJobId(job.getId(), JobStatusType.run);
 
         CallRequest callRequest = new CallRequest();
         callRequest.setJob(job);
+        callRequest.setApp(app);
 
         // 立即重试机制
         int count = 0;
         boolean result = false;
         while (!result) {
-            if (job.getCallType() == CallType.dubbo) {
+            if (job.getCallType().equals(CallType.dubbo)) {
                 result = callDubbo(callRequest);
             } else {
                 result = callHttp(callRequest);
@@ -95,17 +86,7 @@ public class CallJobTask implements Callable {
     }
 
     private boolean callHttp(CallRequest callRequest) {
-        Job job = callRequest.getJob();
-        String url = ConstValue.HTTP_URI_HEAD_STR + job.getCallHost() + ":" + ConstValue.HTTP_CALL_PORT + ConstValue.HTTP_CALL_URL;
-        Map<String, Object> formMap = new HashMap<>();
-        formMap.put("data", JSON.toJSONString(callRequest));
-
-        HttpResponse response = HttpRequest.post(url)
-                .form(formMap)
-                .contentType("multipart/form-data;charset=utf-8")
-                .execute();
-
-        return response.getStatus() == StatusCode.SUCCESS;
+        return HTTPCall.call(callRequest).isSuccess();
     }
 
     private boolean callDubbo(CallRequest callRequest) throws MyTriggerException {

@@ -1,6 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.service.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
+import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.mapper.JobMapper;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
@@ -105,6 +106,11 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public boolean ack(Long jobId) {
+        // 调度成功就删除
+        if (jobMapper.ack(jobId) > 0) {
+            remove(jobId);
+            return true;
+        }
         return false;
     }
 
@@ -121,5 +127,10 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> selectTriggerJob(String sql) {
         return jobMapper.selectTriggerJob(sql);
+    }
+
+    @Override
+    public App findAppById(Long appId) {
+        return jobMapper.selectAppById(appId);
     }
 }

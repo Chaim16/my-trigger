@@ -26,7 +26,9 @@ public class ExecuteAndAck implements Runnable{
     @Override
     public void run() {
         long start = System.currentTimeMillis();
+
         boolean success = task.run();
+
         if (!success) {
             throw new MyTriggerException("[call] task excute faild");
         }

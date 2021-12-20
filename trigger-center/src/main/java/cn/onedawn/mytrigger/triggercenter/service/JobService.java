@@ -1,5 +1,6 @@
 package cn.onedawn.mytrigger.triggercenter.service;
 
+import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.Request;
 import cn.onedawn.mytrigger.type.JobStatusType;
@@ -36,4 +37,5 @@ public interface JobService {
 
     List<Job> selectTriggerJob(String sql);
 
+    App findAppById(Long app);
 }

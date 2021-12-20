@@ -77,11 +77,4 @@ public class DubboCallServiceClient {
         }
     }
 
-    public static void main(String[] args) {
-        DubboCallServiceClient client = new DubboCallServiceClient();
-        DubboService dubboService = (DubboService) client.getReferenceConfig().get();
-        System.out.println(dubboService.getClass().getName());
-        System.out.println("--------------------");
-    }
-
 }

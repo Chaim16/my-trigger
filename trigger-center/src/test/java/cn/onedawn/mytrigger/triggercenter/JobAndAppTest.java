@@ -26,7 +26,7 @@ class JobAndAppTest {
     public void appRegisterTest() throws MyTriggerException {
         Map<String, Object> formMap = new HashMap<>();
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setApp(new App(1L, "taobao", String.valueOf(UUID.randomUUID())));
+        registerRequest.setApp(new App(1L, "mayi", String.valueOf(UUID.randomUUID())));
         registerRequest.check();
         formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(registerRequest));
 
@@ -45,10 +45,10 @@ class JobAndAppTest {
     public void jobRegisterTest() throws MyTriggerException {
         Job job = new Job();
         job.setStatus(JobStatusType.wait);
-        job.setCron("* * * * * ?")
+        job.setCron("1 * * * * ?")
                 .setRemove((byte) 0)
-                .setApp(1L)
-                .setCallName("call")
+                .setApp(6L)
+                .setCallName("dubboCallTest")
                 .setCallType(CallType.dubbo);
 
         RegisterRequest registerRequest = new RegisterRequest();

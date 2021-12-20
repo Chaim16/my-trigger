@@ -72,8 +72,24 @@
         where id = #{id};
     </update>
 
-    <select id="selectTriggerJob" parameterType="java.lang.String" resultType="cn.onedawn.mytrigger.pojo.Job">
+    <select id="selectTriggerJob" parameterType="java.lang.String" resultMap="selectJobMap">
         ${sql }
+    </select>
+
+    <update id="ack" parameterType="java.lang.Long">
+        update 任务
+        set status = 'finished'
+        where id = #{jobId}
+    </update>
+
+    <resultMap id="selectAppMap" type="cn.onedawn.mytrigger.pojo.App">
+        <result property="id" column="id"></result>
+        <result property="appName" column="app_name"></result>
+        <result property="appId" column="app_id"></result>
+    </resultMap>
+
+    <select id="selectAppById" parameterType="java.lang.Long" resultMap="selectAppMap">
+        select * from 应用 where id = #{appId}
     </select>
 
 </mapper>

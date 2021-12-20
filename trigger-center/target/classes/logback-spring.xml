@@ -184,8 +184,7 @@
         <appender-ref ref="ERROR_FILE"/>
     </root>
 
-<!--
-    &lt;!&ndash;    生产环境:输出到文件&ndash;&gt;
+    <!--    生产环境:输出到文件-->
     <springProfile name="pro">
         <root level="info">
             <appender-ref ref="CONSOLE"/>
@@ -195,7 +194,6 @@
             <appender-ref ref="WARN_FILE"/>
         </root>
     </springProfile>
--->
 
 
     <!-- 时间滚动输出 level为 ERROR 日志 -->
