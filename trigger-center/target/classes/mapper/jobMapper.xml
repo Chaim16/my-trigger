@@ -15,7 +15,8 @@
                 #{cron},
                 #{createTime},
                 #{modifyTime},
-                #{app})
+                #{app},
+                null)
     </insert>
 
     <update id="modify" parameterType="cn.onedawn.mytrigger.pojo.Job">
@@ -29,7 +30,8 @@
             call_host    = #{callHost},
             cron        = #{cron},
             modify_time  = #{modifyTime},
-            app         = #{app}
+            app         = #{app},
+            callerror_retry_count = #{callerrorRetryCount}
         where id = #{id};
     </update>
 
@@ -58,6 +60,7 @@
         <result property="createTime" column="create_time"/>
         <result property="modifyTime" column="modify_time"/>
         <result property="app" column="app"/>
+        <result property="callerrorRetryCount" column="callerror_retry_count"/>
     </resultMap>
 
     <select id="selectAllJobByAppId" parameterType="java.lang.Long" resultMap="selectJobMap">
@@ -72,7 +75,7 @@
         where id = #{id};
     </update>
 
-    <select id="selectTriggerJob" parameterType="java.lang.String" resultMap="selectJobMap">
+    <select id="selectJob" parameterType="java.lang.String" resultMap="selectJobMap">
         ${sql }
     </select>
 
@@ -90,6 +93,10 @@
 
     <select id="selectAppById" parameterType="java.lang.Long" resultMap="selectAppMap">
         select * from 应用 where id = #{appId}
+    </select>
+
+    <select id="selectJobById" parameterType="java.lang.Long" resultMap="selectJobMap">
+        select * from 任务 where id = #{jobId}
     </select>
 
 </mapper>

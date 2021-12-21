@@ -28,9 +28,11 @@ public interface JobMapper {
 
     int updateStatusByJobId(Long id, JobStatusType status);
 
-    List<Job> selectTriggerJob(String sql);
+    List<Job> selectJob(String sql);
 
     int ack(Long jobId);
 
     App selectAppById(Long appId);
+
+    Job selectJobById(Long jobId);
 }

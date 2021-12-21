@@ -5,6 +5,7 @@ import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.mapper.JobMapper;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
+import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.CronUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class JobServiceImpl implements JobService {
     @Autowired
     private JobMapper jobMapper;
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat(ConstValue.TIME_PATTERN);
 
     @Override
     public boolean register(Job job) {
@@ -104,14 +105,32 @@ public class JobServiceImpl implements JobService {
         return jobMapper.pause(jobId) > 0;
     }
 
+    /**
+     * 找出Job，判断是否为周期性调度
+     * 如果是周期性调度，则更新状态和下一次调度时间
+     */
     @Override
-    public boolean ack(Long jobId) {
-        // 调度成功就删除
-        if (jobMapper.ack(jobId) > 0) {
+    public boolean ack(Long jobId) throws MyTriggerException, ParseException {
+        Job job = findJobById(jobId);
+        // 一次性任务
+        if (CronUtil.checkCronOneTime(job.getCron())) {
             remove(jobId);
-            return true;
+            return jobMapper.ack(jobId) > 0;
+        } else { // 周期性任务
+            if (job.getRemove() == 1) {
+                job.setStatus(JobStatusType.finish);
+            } else {
+                job.setStatus(JobStatusType.wait);
+                // 设置下一次调度的时间
+                job.setTriggerTime(dateFormat.format(CronUtil.getLoopTime(job.getCron(), System.currentTimeMillis())));
+                job.setCallerrorRetryCount(0);
+            }
+            return jobMapper.modify(job) > 0;
         }
-        return false;
+    }
+
+    private Job findJobById(Long jobId) {
+        return jobMapper.selectJobById(jobId);
     }
 
     @Override
@@ -125,8 +144,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> selectTriggerJob(String sql) {
-        return jobMapper.selectTriggerJob(sql);
+    public List<Job> findJob(String sql) {
+        return jobMapper.selectJob(sql);
     }
 
     @Override

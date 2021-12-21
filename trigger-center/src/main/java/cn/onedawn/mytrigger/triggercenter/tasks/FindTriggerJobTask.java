@@ -9,13 +9,13 @@ import cn.onedawn.mytrigger.triggercenter.service.JobService;
  * @Description TODO
  * @createTime 2021年11月02日 23:05:00
  */
-public class SelectTriggerJobTask extends AbstractSelectTask {
+public class FindTriggerJobTask extends AbstractSelectTask {
 
-    public SelectTriggerJobTask(JobService jobService) {
+    public FindTriggerJobTask(JobService jobService) {
         super(jobService);
     }
 
-    public SelectTriggerJobTask() {}
+    public FindTriggerJobTask() {}
 
     @Override
     protected String getSelectSql() {

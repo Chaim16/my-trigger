@@ -19,11 +19,34 @@ import java.util.concurrent.Future;
 public class CallEnter {
 
     /**
-     * 选择即将要调度的任务
+     * 获取即将要调度的任务
      */
-    public static List<Job> selectTriggerJobs(JobService jobService) throws ExecutionException, InterruptedException {
+    public static List<Job> findTriggerJobs(JobService jobService) throws ExecutionException, InterruptedException {
         Future submit = TaskExecutor.getThreadPoolExecutor()
-                .submit(new SelectTriggerJobTask(jobService));
+                .submit(new FindTriggerJobTask(jobService));
+        List<Job> jobs = (List<Job>) submit.get();
+        return jobs;
+    }
+
+
+    /**
+     * 获取要即将要重试的任务
+     */
+    public static List<Job> findCallErrorJobs(JobService jobService, int retryCallErrorJobCountThreshold) throws ExecutionException, InterruptedException {
+        Future submit = TaskExecutor.getThreadRetryCallErrorPoolExecutor()
+                .submit(new FindCallErrorJobTask(jobService, retryCallErrorJobCountThreshold));
+        List<Job> jobs = (List<Job>) submit.get();
+        return jobs;
+    }
+
+    /**
+     * 获取正在进行调度，但未完成的任务
+     * @param jobService
+     * @return
+     */
+    public static List<Job> findRunJobs(JobService jobService) throws ExecutionException, InterruptedException {
+        Future submit = TaskExecutor.getThreadRetryRunPoolExecutor()
+                .submit(new FindRunJobTask(jobService));
         List<Job> jobs = (List<Job>) submit.get();
         return jobs;
     }
@@ -64,6 +87,7 @@ public class CallEnter {
         }
         return futures;
     }
+
 
 
 }

@@ -1,6 +1,5 @@
 package cn.onedawn.mytrigger.triggercenter.sched;
 
-import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
@@ -26,7 +25,7 @@ import java.util.concurrent.Future;
 public class TriggerJob {
 
     private JobService jobService;
-    private static final long schedTime = ConstValue.SCHED_TIME;
+    private static final long schedTime = ConstValue.TRIGGER_SCHED_TIME;
 
     public TriggerJob() {
         jobService = SpringBeanFactory.getBeanByType(JobService.class);
@@ -43,10 +42,10 @@ public class TriggerJob {
 
                         long sleepTime = schedTime - (end - start);
                         if (sleepTime > 0) {
-                          Thread.sleep(sleepTime);
+                            Thread.sleep(sleepTime);
                         }
                     } catch (InterruptedException e) {
-                        throw new MyTriggerException(String.valueOf(e));
+                        // 日志记录
                     }
                 }
             }
@@ -60,7 +59,7 @@ public class TriggerJob {
                 do {
                     long start = System.currentTimeMillis();
                     // 获取要即将调度的任务
-                    List<Job> jobs = CallEnter.selectTriggerJobs(jobService);
+                    List<Job> jobs = CallEnter.findTriggerJobs(jobService);
                     long end = System.currentTimeMillis();
 
                     // 日志提示时间

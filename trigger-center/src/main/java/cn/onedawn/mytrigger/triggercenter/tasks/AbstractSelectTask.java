@@ -2,7 +2,6 @@ package cn.onedawn.mytrigger.triggercenter.tasks;
 
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -29,7 +28,7 @@ public abstract class AbstractSelectTask implements Callable {
     public Object call() throws Exception {
         List<Job> jobs;
         String sql = getSelectSql();
-        jobs = jobService.selectTriggerJob(sql);
+        jobs = jobService.findJob(sql);
         return jobs;
     }
 

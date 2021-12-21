@@ -8,6 +8,8 @@ package cn.onedawn.mytrigger.utils;
  * @createTime 2021年10月26日 10:54:00
  */
 public class ConstValue {
+    public static final String TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
     public static final String REQUEST_DATA = "data";
 
     public static final String SERVER = "127.0.0.1";

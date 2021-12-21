@@ -1,5 +1,6 @@
 package cn.onedawn.mytrigger.triggercenter.service;
 
+import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.Request;
@@ -29,13 +30,13 @@ public interface JobService {
 
     boolean pause(Long jobId);
 
-    boolean ack(Long jobId);
+    boolean ack(Long jobId) throws MyTriggerException, ParseException;
 
     List<Job> findAllJobByApp(Long id);
 
     int updateStatusByJobId(Long id, JobStatusType status);
 
-    List<Job> selectTriggerJob(String sql);
+    List<Job> findJob(String sql);
 
     App findAppById(Long app);
 }

@@ -23,35 +23,35 @@ public class TaskExecutor {
     private static ThreadPoolExecutor threadPoolExecutor =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE,60, TimeUnit.SECONDS,
                     new LinkedBlockingQueue(5000),
-                    new NamedThreadFactory("timeout-server"),
+                    new NamedThreadFactory("mytrigger-center"),
                     new DiscardAndMessagePolicy()
             );
 
-    private static ThreadPoolExecutor threadRetryPoolExecutor =
+    private static ThreadPoolExecutor threadRetryRunPoolExecutor =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE,60, TimeUnit.SECONDS,
                     new LinkedBlockingQueue(5000),
-                    new NamedThreadFactory("timeout-server-retry"),
+                    new NamedThreadFactory("mytrigger-center-retry-run"),
                     new DiscardAndMessagePolicy()
             );
 
     private static ThreadPoolExecutor threadRetryCallErrorPoolExecutor =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE,60, TimeUnit.SECONDS,
                     new LinkedBlockingQueue(5000),
-                    new NamedThreadFactory("timeout-server-retry-callerror"),
+                    new NamedThreadFactory("mytrigger-center-retry-callerror"),
                     new DiscardAndMessagePolicy()
             );
 
     private static ThreadPoolExecutor threadDeleteJobPoolExecutor =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE,60, TimeUnit.SECONDS,
                     new LinkedBlockingQueue(5000),
-                    new NamedThreadFactory("timeout-server-delete-job"),
+                    new NamedThreadFactory("mytrigger-center-delete"),
                     new DiscardAndMessagePolicy()
             );
 
     private static ThreadPoolExecutor monitorPoolExecutor =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE,60, TimeUnit.SECONDS,
                     new LinkedBlockingQueue(50000),
-                    new NamedThreadFactory("timeout-server-monitor"),
+                    new NamedThreadFactory("mytrigger-center-monitor"),
                     new DiscardAndMessagePolicy()
             );
 
@@ -63,8 +63,8 @@ public class TaskExecutor {
         return threadPoolExecutor;
     }
 
-    public static ThreadPoolExecutor getThreadRetryPoolExecutor() {
-        return threadRetryPoolExecutor;
+    public static ThreadPoolExecutor getThreadRetryRunPoolExecutor() {
+        return threadRetryRunPoolExecutor;
     }
 
     public static ThreadPoolExecutor getThreadRetryCallErrorPoolExecutor() {
