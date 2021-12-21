@@ -7,6 +7,7 @@ import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
@@ -44,13 +45,12 @@ public class CallEnter {
      * @param jobService
      * @return
      */
-    public static List<Job> findRunJobs(JobService jobService) throws ExecutionException, InterruptedException {
+    public static List<Job> findRunJobs(JobService jobService, boolean retried) throws ExecutionException, InterruptedException {
         Future submit = TaskExecutor.getThreadRetryRunPoolExecutor()
-                .submit(new FindRunJobTask(jobService));
+                .submit(new FindRunJobTask(jobService, retried));
         List<Job> jobs = (List<Job>) submit.get();
         return jobs;
     }
-
 
     /**
      * 提交任务给线程池执行

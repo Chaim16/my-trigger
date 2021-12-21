@@ -16,6 +16,7 @@
                 #{createTime},
                 #{modifyTime},
                 #{app},
+                null,
                 null)
     </insert>
 
@@ -31,19 +32,20 @@
             cron        = #{cron},
             modify_time  = #{modifyTime},
             app         = #{app},
-            callerror_retry_count = #{callerrorRetryCount}
+            callerror_retry_count = #{callerrorRetryCount},
+            run_retry = #{runRetry}
         where id = #{id};
     </update>
 
     <update id="remove" parameterType="java.lang.Long">
         update 任务
-        set remove = 1
+        set remove = 1, modify_time = now()
         where id = #{id};
     </update>
 
     <update id="pause" parameterType="java.lang.Long">
         update 任务
-        set status = "pause"
+        set status = "pause", modify_time = now()
         where id = #{id};
     </update>
 
@@ -61,6 +63,7 @@
         <result property="modifyTime" column="modify_time"/>
         <result property="app" column="app"/>
         <result property="callerrorRetryCount" column="callerror_retry_count"/>
+        <result property="runRetry" column="run_retry"/>
     </resultMap>
 
     <select id="selectAllJobByAppId" parameterType="java.lang.Long" resultMap="selectJobMap">
@@ -71,7 +74,7 @@
 
     <update id="updateStatusByJobId">
         update 任务
-        set status = #{status}
+        set status = #{status}, modify_time = now()
         where id = #{id};
     </update>
 
@@ -81,7 +84,7 @@
 
     <update id="ack" parameterType="java.lang.Long">
         update 任务
-        set status = 'finished'
+        set status = 'finished', modify_time = now()
         where id = #{jobId}
     </update>
 

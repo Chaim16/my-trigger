@@ -11,12 +11,15 @@ import cn.onedawn.mytrigger.triggercenter.service.JobService;
  */
 public class FindRunJobTask extends AbstractSelectTask{
 
-    public FindRunJobTask(JobService jobService) {
+    private boolean retried;
+
+    public FindRunJobTask(JobService jobService, boolean retried) {
         super(jobService);
+        this.retried = retried;
     }
 
     @Override
     protected String getSelectSql() {
-        return "select * from 任务 where status = 'run' and remove = 0 and modify_time < now()";
+        return "select * from 任务 where status = 'run' and remove = 0 and modify_time < now() and run_retry = " + (retried ? 1 : 0);
     }
 }

@@ -57,4 +57,7 @@ public class Job implements Serializable {
     @JSONField(name = "callerrorRetryCount")
     private Integer callerrorRetryCount;
 
+    @JSONField(name = "runRetry")
+    private Integer runRetry;
+
 }

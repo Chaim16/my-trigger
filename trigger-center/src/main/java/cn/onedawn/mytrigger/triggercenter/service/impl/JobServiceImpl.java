@@ -124,6 +124,7 @@ public class JobServiceImpl implements JobService {
                 // 设置下一次调度的时间
                 job.setTriggerTime(dateFormat.format(CronUtil.getLoopTime(job.getCron(), System.currentTimeMillis())));
                 job.setCallerrorRetryCount(0);
+                job.setRunRetry(0);
             }
             return jobMapper.modify(job) > 0;
         }
