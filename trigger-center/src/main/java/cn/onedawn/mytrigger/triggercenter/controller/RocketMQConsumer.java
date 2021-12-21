@@ -15,6 +15,8 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,8 @@ import java.util.List;
  */
 @Component
 public class RocketMQConsumer implements InitializingBean {
+    private static Logger logger = LoggerFactory.getLogger(RocketMQConsumer.class);
+
     private static DefaultMQPushConsumer consumer;
 
     @Autowired
@@ -52,11 +56,12 @@ public class RocketMQConsumer implements InitializingBean {
                             registerRequest.check();
                             Job job = registerRequest.getJob();
                             jobService.register(job);
+                            logger.info("[register job by mq] success, jobId:{}", job.getId());
                         } else if ("ack".equals(msg.getTags())) {
                             AckRequest ackRequest = JSON.parseObject(messageBody, AckRequest.class);
                             ackRequest.check();
-
                             jobService.ack(ackRequest.getJobId());
+                            logger.info("[ack job by mq] success, jobId:{}", ackRequest.getJobId());
                         }
                     }
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
@@ -64,8 +69,8 @@ public class RocketMQConsumer implements InitializingBean {
             });
             consumer.start();
         } catch (MQClientException e) {
-            e.printStackTrace();
+            logger.info("RocketMQ Consumer Started failed");
         }
-        System.out.println("RocketMQ Consumer Started.");
+        logger.info("RocketMQ Consumer Started success");
     }
 }

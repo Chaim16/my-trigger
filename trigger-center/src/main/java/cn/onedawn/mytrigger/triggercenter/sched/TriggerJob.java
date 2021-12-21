@@ -6,6 +6,8 @@ import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +26,13 @@ import java.util.concurrent.Future;
 @DependsOn("beanService")
 public class TriggerJob {
 
+    private static Logger logger = LoggerFactory.getLogger(TriggerJob.class);
+
     private JobService jobService;
     private static final long schedTime = ConstValue.TRIGGER_SCHED_TIME;
 
     public TriggerJob() {
+        logger.info("trigger job thread init");
         jobService = SpringBeanFactory.getBeanByType(JobService.class);
 
         Runnable runnable = new Runnable() {
@@ -61,8 +66,8 @@ public class TriggerJob {
                     // 获取要即将调度的任务
                     List<Job> jobs = CallEnter.findTriggerJobs(jobService);
                     long end = System.currentTimeMillis();
-
                     // 日志提示时间
+                    logger.info("trigger job thread get {} jobs, time consuming:{} ms", jobs.size(), end - start);
 
                     if (jobs.size() == 0) {
                         break;
@@ -73,9 +78,8 @@ public class TriggerJob {
                         future.get();
                     }
                     end = System.currentTimeMillis();
-
                     // 日志提示时间
-
+                    logger.info("[trigger jobs] {} jobs have been trigger, time consuming:{}", jobs.size(), end - start);
                 } while (true);
             }
         };

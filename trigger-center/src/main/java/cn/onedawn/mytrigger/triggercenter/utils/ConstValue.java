@@ -25,5 +25,5 @@ public class ConstValue extends cn.onedawn.mytrigger.utils.ConstValue {
     public static int RETRY_CALL_ERROR_JOB_COUNT_THRESHOLD = 10;
 
     // 5分钟重试
-    public static int RETRY_RUN_JOB_SCHEDULE_TIME = 5;
+    public static int RETRY_RUN_JOB_SCHEDULE_TIME = 300;
 }

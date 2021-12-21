@@ -6,9 +6,12 @@ import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.utils.ConstValue;
+import com.alibaba.fastjson.JSON;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class DubboCallServiceClient {
+
+    private static Logger logger = LoggerFactory.getLogger(DubboCallServiceClient.class);
 
     private ReferenceConfig<DubboService> referenceConfig;
     private RegistryConfig registryConfig;
@@ -55,12 +60,11 @@ public class DubboCallServiceClient {
         ReferenceConfig<DubboService> referenceConfig = getReferenceConfig();
         DubboService callbackService = null;
         callbackService = getCallHandler(referenceConfig, callRequest.getApp());
-
-        if (callbackService != null) {
-            return callbackService.handle(callRequest);
-        } else {
-            throw new MyTriggerException("[callback] faild");
+        if (callbackService == null) {
+            logger.error("mytrigger center callback by dubbo can't find service task: {}", JSON.toJSONString(callRequest));
+            throw new MyTriggerException("mytrigger center callback by dubbo can't find service");
         }
+        return callbackService.handle(callRequest);
     }
 
     private DubboService getCallHandler(ReferenceConfig<DubboService> referenceConfig, App app) {

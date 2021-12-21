@@ -11,8 +11,10 @@ import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.JobStatusType;
-import cn.onedawn.mytrigger.utils.CronUtil;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
+import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.util.*;
@@ -26,6 +28,8 @@ import java.util.concurrent.Callable;
  * @createTime 2021年11月02日 12:41:00
  */
 public class CallJobTask implements Callable {
+
+    private static Logger logger = LoggerFactory.getLogger(CallJobTask.class);
 
     private List<Job> jobs;
     private JobService jobService;
@@ -59,7 +63,7 @@ public class CallJobTask implements Callable {
         return true;
     }
 
-    private void doCall(Job job) throws ParseException, MyTriggerException {
+    private void doCall(Job job) throws MyTriggerException {
         App app = jobService.findAppById(job.getApp());
         jobService.updateStatusByJobId(job.getId(), JobStatusType.run);
 
@@ -79,22 +83,31 @@ public class CallJobTask implements Callable {
             // 调度失败
             if (!result) {
                 ++count;
+                logger.warn("[right now retry] count:{}, jobId:{}", count, job.getId());
                 if (count > ConstValue.TRIGGER_RETRY_COUNT) {
-                    throw new MyTriggerException("trigger job error, jobId:" + job.getId());
+                    logger.error("[trigger job] error, jobId:{}", job.getId());
                 }
             }
         }
     }
 
     private boolean callHttp(CallRequest callRequest) {
-        return HTTPCall.call(callRequest).isSuccess();
+        Response response = HTTPCall.call(callRequest);
+        if (response.isSuccess()) {
+            logger.info("[callback by http] success : {}", JSON.toJSONString(callRequest));
+        } else {
+            logger.info("[callback by http] failed : {}", JSON.toJSONString(callRequest));
+        }
+        return response.isSuccess();
     }
 
     private boolean callDubbo(CallRequest callRequest) throws MyTriggerException {
         DubboCallServiceClient client = SpringBeanFactory.getBean(DubboCallServiceClient.class);
         Response response = client.callback(callRequest);
-        if (!response.isSuccess()) {
-            throw new MyTriggerException("call dubbo error, msg:" + callRequest.getJob());
+        if (response.isSuccess()) {
+            logger.info("[callback by dubbo] success : {}", JSON.toJSONString(callRequest));
+        } else {
+            logger.info("[callback by dubbo] failed : {}", JSON.toJSONString(callRequest));
         }
         return response.isSuccess();
     }

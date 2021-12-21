@@ -8,6 +8,8 @@ import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.CronUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService {
 
+    private static Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
+
     @Autowired
     private JobMapper jobMapper;
 
@@ -40,17 +44,9 @@ public class JobServiceImpl implements JobService {
         try {
             setTriggerTime(job);
         } catch (ParseException e) {
-            try {
-                throw new ParseException("[time convert] faild", 0);
-            } catch (ParseException ex) {
-                ex.printStackTrace();
-            }
+            logger.error("[register job] time convert failed, jobId:{}", job.getId());
         } catch (MyTriggerException e) {
-            try {
-                throw new MyTriggerException("[time] get onetime faild");
-            } catch (MyTriggerException ex) {
-                ex.printStackTrace();
-            }
+            logger.error("[register job] get onetime failed, jobId:{}", job.getId());
         }
         return jobMapper.register(job);
     }
@@ -73,17 +69,9 @@ public class JobServiceImpl implements JobService {
         try {
             setTriggerTime(job);
         } catch (ParseException e) {
-            try {
-                throw new ParseException("[time convert] faild", 0);
-            } catch (ParseException ex) {
-                ex.printStackTrace();
-            }
+            logger.error("[modify job] time convert failed, jobId:{}", job.getId());
         } catch (MyTriggerException e) {
-            try {
-                throw new MyTriggerException("[time] get onetime faild");
-            } catch (MyTriggerException ex) {
-                ex.printStackTrace();
-            }
+            logger.error("[modify job] time get onetime failed, jobId:{}", job.getId());
         }
         return jobMapper.modify(job) > 0;
     }

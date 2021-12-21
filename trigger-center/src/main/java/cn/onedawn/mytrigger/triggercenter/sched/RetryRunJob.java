@@ -37,6 +37,7 @@ public class RetryRunJob {
     private static final int retryRunJobScheduleTime = ConstValue.RETRY_RUN_JOB_SCHEDULE_TIME;
 
     public RetryRunJob() {
+        logger.info("retry run job thread init");
         jobService = SpringBeanFactory.getBean(JobService.class);
         Runnable runnable = () -> {
             try {
@@ -46,9 +47,9 @@ public class RetryRunJob {
                     long start, end;
                     start = System.currentTimeMillis();
                     List<Job> jobs = CallEnter.findRunJobs(jobService, false);
-
                     retryCount = jobs.size();
                     end = System.currentTimeMillis();
+                    logger.info("retry run job thread get {} jobs, time consuming:{} ms", retryCount, end - start);
 
                     start = System.currentTimeMillis();
                     updateRunRetry(jobs);
@@ -57,11 +58,9 @@ public class RetryRunJob {
                         future.get();
                     }
                     end = System.currentTimeMillis();
-
-                    // 日志记录
+                    logger.info("run jobs have been retried, time consuming: {} ms", end - start);
 
                     Thread.sleep(1000);
-
                     // 重试之后也失败的，状态改为 callerror
                     jobs = CallEnter.findRunJobs(jobService, true);
                     updateJobStatus(jobs, JobStatusType.callerror);
@@ -77,6 +76,7 @@ public class RetryRunJob {
 
     private void updateJobStatus(List<Job> jobs, JobStatusType jobStatusType) {
         for (Job job : jobs) {
+            logger.info("retry run job failed, now change the status to callError, jobId:{}", job.getId());
             job.setStatus(jobStatusType);
             jobService.modify(job);
         }
@@ -84,6 +84,7 @@ public class RetryRunJob {
 
     private void updateRunRetry(List<Job> jobs) {
         for (Job job : jobs) {
+            logger.info("[retry run job], jobId:{}", job.getId());
             job.setRunRetry(1);
             jobService.modify(job);
         }
