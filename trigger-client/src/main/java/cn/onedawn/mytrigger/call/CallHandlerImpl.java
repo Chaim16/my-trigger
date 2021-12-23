@@ -1,6 +1,6 @@
 package cn.onedawn.mytrigger.call;
 
-import cn.onedawn.mytrigger.api.DubboService;
+import cn.onedawn.mytrigger.api.CallHandler;
 import cn.onedawn.mytrigger.excutor.ExecuteAndAck;
 import cn.onedawn.mytrigger.excutor.TaskExecutor;
 import cn.onedawn.mytrigger.pojo.Job;
@@ -15,7 +15,7 @@ import cn.onedawn.mytrigger.utils.SpringBeanFactory;
  * @Description TODO
  * @createTime 2021年10月29日 04:51:00
  */
-public class DubboCallServiceImpl implements DubboService {
+public class CallHandlerImpl implements CallHandler {
     @Override
     public Response handle(CallRequest callRequest) {
         long start = System.currentTimeMillis();

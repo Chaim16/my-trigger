@@ -51,6 +51,7 @@ public class TriggerJob {
                         }
                     } catch (InterruptedException e) {
                         // 日志记录
+                        logger.error("trigger jobs failed, Exception: {}", e.getMessage());
                     }
                 }
             }
@@ -83,7 +84,7 @@ public class TriggerJob {
                 } while (true);
             }
         };
-        Thread triggerThread = new Thread(runnable);
+        Thread triggerThread = new Thread(runnable, "trigger daemon thread");
         triggerThread.setDaemon(true);
         triggerThread.start();
     }

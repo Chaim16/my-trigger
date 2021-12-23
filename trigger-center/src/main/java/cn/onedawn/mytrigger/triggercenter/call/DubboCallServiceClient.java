@@ -1,12 +1,14 @@
 package cn.onedawn.mytrigger.triggercenter.call;
 
-import cn.onedawn.mytrigger.api.DubboService;
+import cn.onedawn.mytrigger.api.CallHandler;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
@@ -14,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,38 +32,58 @@ public class DubboCallServiceClient {
 
     private static Logger logger = LoggerFactory.getLogger(DubboCallServiceClient.class);
 
-    private ReferenceConfig<DubboService> referenceConfig;
     private RegistryConfig registryConfig;
     private ApplicationConfig applicationConfig;
 
-    /* <appName, callHandler> */
-    private volatile ConcurrentHashMap<String, DubboService> callHandlerMap = new ConcurrentHashMap<>();
-
-    private static final Object callHandlerMapLock = new Object();
-
-    public synchronized ReferenceConfig getReferenceConfig() {
+    public DubboCallServiceClient() {
         applicationConfig = new ApplicationConfig("my-trigger-center");
-
         registryConfig = new RegistryConfig();
         registryConfig.setAddress(ConstValue.ZOOKEEPER_ADDRESS);
         registryConfig.setProtocol("zookeeper");
         registryConfig.setTimeout(10000);
+    }
 
-        referenceConfig = new ReferenceConfig<DubboService>();
-        referenceConfig.setApplication(applicationConfig);
-        referenceConfig.setProtocol(ConstValue.DUBBO_PROTOCOL);
-        referenceConfig.setInterface(DubboService.class);
-        referenceConfig.setRegistry(registryConfig);
+    /* appName, ReferenceConfig*/
+    private Map<String, ReferenceConfig<CallHandler>> referenceConfigMap = new HashMap<>();
+    /* <appName, callHandler> */
+    private volatile ConcurrentHashMap<String, CallHandler> callHandlerMap = new ConcurrentHashMap<>();
+
+    private static final Object callHandlerMapLock = new Object();
+
+    public synchronized ReferenceConfig getReferenceConfig(String appName, String callHost) {
+        String key;
+        if (StringUtils.isNotBlank(callHost)) {
+            key = appName + "_" + callHost;
+        } else {
+            key = appName;
+        }
+        if (referenceConfigMap.containsKey(key)) {
+            return referenceConfigMap.get(key);
+        }
+        /* 重新建立ReferenceConfig */
+        ReferenceConfig referenceConfig = new ReferenceConfig<CallHandler>();
+        referenceConfig.setInterface(CallHandler.class);
         referenceConfig.setVersion("1.0.0");
         referenceConfig.setTimeout(5000);
 
+        if (StringUtils.isNotBlank(callHost)) {
+            String url = ConstValue.DUBBO_PROTOCOL_HEAD + callHost + "/" + CallHandler.class.getCanonicalName();
+            referenceConfig.setUrl(url);
+        }
+        referenceConfig.setApplication(applicationConfig);
+        referenceConfig.setProtocol(ConstValue.DUBBO_PROTOCOL);
+        referenceConfig.setRegistry(registryConfig);
+        referenceConfigMap.put(key, referenceConfig);
         return referenceConfig;
     }
 
     public Response callback(CallRequest callRequest) throws MyTriggerException {
-        ReferenceConfig<DubboService> referenceConfig = getReferenceConfig();
-        DubboService callbackService = null;
-        callbackService = getCallHandler(referenceConfig, callRequest.getApp());
+        App app = callRequest.getApp();
+        Job job = callRequest.getJob();
+
+        ReferenceConfig<CallHandler> referenceConfig = getReferenceConfig(app.getAppName(), job.getCallHost());
+        CallHandler callbackService = null;
+        callbackService = getCallHandler(referenceConfig, app.getAppName(), job.getCallHost());
         if (callbackService == null) {
             logger.error("mytrigger center callback by dubbo can't find service task: {}", JSON.toJSONString(callRequest));
             throw new MyTriggerException("mytrigger center callback by dubbo can't find service");
@@ -67,17 +91,23 @@ public class DubboCallServiceClient {
         return callbackService.handle(callRequest);
     }
 
-    private DubboService getCallHandler(ReferenceConfig<DubboService> referenceConfig, App app) {
-        if (callHandlerMap.containsKey(app.getAppName())) {
-            return callHandlerMap.get(app.getAppName());
+    private CallHandler getCallHandler(ReferenceConfig<CallHandler> referenceConfig, String appName, String callHost) {
+        String key;
+        if (StringUtils.isNotBlank(callHost)) {
+            key = appName + "_" + callHost;
+        } else {
+            key = appName;
+        }
+        if (callHandlerMap.containsKey(key)) {
+            return callHandlerMap.get(key);
         }
         synchronized (callHandlerMapLock) {
-            if (callHandlerMap.containsKey(app.getAppName())) {
-                return callHandlerMap.get(app.getAppName());
+            if (callHandlerMap.containsKey(key)) {
+                return callHandlerMap.get(key);
             }
-            DubboService dubboService = referenceConfig.get();
-            callHandlerMap.put(app.getAppName(), dubboService);
-            return dubboService;
+            CallHandler callHandler = referenceConfig.get();
+            callHandlerMap.put(key, callHandler);
+            return callHandler;
         }
     }
 

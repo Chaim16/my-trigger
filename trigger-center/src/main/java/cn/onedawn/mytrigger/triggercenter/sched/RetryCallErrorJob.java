@@ -1,6 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.sched;
 
 import cn.onedawn.mytrigger.pojo.Job;
+import cn.onedawn.mytrigger.threadpool.NamedThreadFactory;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
@@ -30,7 +31,7 @@ public class RetryCallErrorJob {
 
     private JobService jobService;
 
-    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("retry-callerror-thread"));
 
     public RetryCallErrorJob() {
         logger.info("retry callError job thread init");
@@ -66,7 +67,7 @@ public class RetryCallErrorJob {
                     } while (retryCount > 0);
                 } catch (Exception e) {
                     // 日志记录
-                    logger.error("retry callError jobs failed");
+                    logger.error("retry callError jobs failed, Exception: {}", e.getMessage());
                 }
             }
 

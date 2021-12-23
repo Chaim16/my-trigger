@@ -10,6 +10,6 @@ import cn.onedawn.mytrigger.response.Response;
  * @Description TODO dubbo接口
  * @createTime 2021年10月29日 04:47:00
  */
-public interface DubboService {
+public interface CallHandler {
     Response handle(CallRequest callRequest);
 }

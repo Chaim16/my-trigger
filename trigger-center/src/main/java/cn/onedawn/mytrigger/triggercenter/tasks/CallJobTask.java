@@ -54,9 +54,9 @@ public class CallJobTask implements Callable {
             try {
                 doCall(job);
             } catch (Exception e) {
+                logger.error("[trigger job] failed, job:{}, Exception : {}", JSON.toJSONString(job), e.getMessage());
                 if (jobService != null) {
                     jobService.updateStatusByJobId(job.getId(), JobStatusType.callerror);
-                    job.setStatus(JobStatusType.callerror);
                 }
             }
         }

@@ -12,7 +12,7 @@ public class ConstValue {
 
     public static final String REQUEST_DATA = "data";
 
-    public static final String SERVER = "127.0.0.1";
+    public static final String SERVER = "192.168.4.1";
     public static final String SERVER_PORT = "8080";
     public static final String BASE_URL = "http://" + ConstValue.SERVER + ":" + ConstValue.SERVER_PORT;
 
@@ -24,6 +24,7 @@ public class ConstValue {
 
     public static final String DUBBO_PROTOCOL = "dubbo";
     public static final int DUBBO_PROTOCOL_PORT = 21886;
+    public static final String DUBBO_PROTOCOL_HEAD = "dubbo://";
 
     public static final String HTTPCALL_SERVER_PORT = "9090";
 }

@@ -1,6 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.sched;
 
 import cn.onedawn.mytrigger.pojo.Job;
+import cn.onedawn.mytrigger.threadpool.NamedThreadFactory;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
 import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
@@ -12,10 +13,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author qingming yu
@@ -32,7 +30,7 @@ public class RetryRunJob {
 
     private JobService jobService;
 
-    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("retry-run-thread"));
 
     private static final int retryRunJobScheduleTime = ConstValue.RETRY_RUN_JOB_SCHEDULE_TIME;
 
@@ -67,6 +65,7 @@ public class RetryRunJob {
                 } while (retryCount > 0);
             } catch (Exception e) {
                 // 日志记录
+                logger.error("retry run jobs failed, Exception: {}", e.getMessage());
             }
         };
         // 30分钟后重试

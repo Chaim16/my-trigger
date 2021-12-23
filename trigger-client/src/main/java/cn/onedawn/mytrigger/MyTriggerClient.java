@@ -83,9 +83,12 @@ public class MyTriggerClient {
         }
 
         dubboCallServiceListener = new DubboCallServiceListener();
+        dubboCallServiceListener.setApp(app);
         dubboCallServiceListener.init();
+
         rocketMQStrategy = new RocketMQStrategy();
         rocketMQStrategy.init();
+
         httpCallListener = new HTTPCallListener();
         httpCallListener.init();
 
@@ -166,15 +169,6 @@ public class MyTriggerClient {
         List<Job> jobs = JSON.parseObject(response.getInfo(), ArrayList.class);
         return jobs;
     }
-
-    public static void main(String[] args) throws MyTriggerException, MQBrokerException, RemotingException, IOException, InterruptedException, MQClientException {
-        MyTriggerClient myTriggerClient = new MyTriggerClient();
-        myTriggerClient.init("543");
-//        myTriggerClient.setSubmitType(SubmitType.HTTP);
-        System.out.println(myTriggerClient.register("* * * * * ?", "call1", "123"));
-        System.out.println(myTriggerClient.getAllJob());
-    }
-
 
     public SubmitType getSubmitType() {
         return submitType;
