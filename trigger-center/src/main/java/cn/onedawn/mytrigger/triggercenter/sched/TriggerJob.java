@@ -3,11 +3,12 @@ package cn.onedawn.mytrigger.triggercenter.sched;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
-import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +25,20 @@ import java.util.concurrent.Future;
  */
 @Service
 @DependsOn("beanService")
-public class TriggerJob {
+public class TriggerJob implements InitializingBean {
 
     private static Logger logger = LoggerFactory.getLogger(TriggerJob.class);
 
     private JobService jobService;
-    private static final long triggerScheduleTime = ConstValue.TRIGGER_SCHEDULE_TIME;
+    private static long triggerScheduleTime;
 
-    public TriggerJob() {
+    @Value("${trigger.schedule.time}")
+    public void setTriggerScheduleTime(long triggerScheduleTime) {
+        TriggerJob.triggerScheduleTime = triggerScheduleTime;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         logger.info("trigger job thread init");
         jobService = SpringBeanFactory.getBeanByType(JobService.class);
 

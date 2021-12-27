@@ -2,10 +2,11 @@ package cn.onedawn.mytrigger.triggercenter.sched;
 
 import cn.onedawn.mytrigger.threadpool.NamedThreadFactory;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
-import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,19 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @DependsOn("beanService")
-public class DeleteJob {
+public class DeleteJob implements InitializingBean {
     private Logger logger = LoggerFactory.getLogger(DeleteJob.class);
     private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("delete-thread"));
     private JobService jobService;
-    private static final long deleteJobScheduleTime = ConstValue.DELETE_JOB_SCHEDULE_TIME;
+    private static long deleteJobScheduleTime;
 
-    public DeleteJob() {
+    @Value("${delete.job.schedule.time}")
+    public void setDeleteJobScheduleTime(long deleteJobScheduleTime) {
+        DeleteJob.deleteJobScheduleTime = deleteJobScheduleTime;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         logger.info("delete job thread init");
         jobService = SpringBeanFactory.getBeanByType(JobService.class);
         Runnable runnable = () -> {
@@ -46,7 +53,6 @@ public class DeleteJob {
             }
         };
         int startTime = (int) (Math.random() * deleteJobScheduleTime);
-        executorService.scheduleAtFixedRate(runnable, startTime, deleteJobScheduleTime, TimeUnit.SECONDS);
+//        executorService.scheduleAtFixedRate(runnable, startTime, deleteJobScheduleTime, TimeUnit.SECONDS);
     }
-
 }

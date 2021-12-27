@@ -8,13 +8,13 @@ import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.triggercenter.call.DubboCallServiceClient;
 import cn.onedawn.mytrigger.triggercenter.call.HTTPCall;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
-import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.text.ParseException;
 import java.util.*;
@@ -34,6 +34,8 @@ public class CallJobTask implements Callable {
     private List<Job> jobs;
     private JobService jobService;
     private boolean trigger;
+    @Value("${trigger.retry.count}")
+    private static int triggerRetryCount;
 
     public CallJobTask(List<Job> jobs, boolean trigger) {
         this.jobs = jobs;
@@ -84,7 +86,7 @@ public class CallJobTask implements Callable {
             if (!result) {
                 ++count;
                 logger.warn("[right now retry] count:{}, jobId:{}", count, job.getId());
-                if (count > ConstValue.TRIGGER_RETRY_COUNT) {
+                if (count > triggerRetryCount) {
                     logger.error("[trigger job] error, jobId:{}", job.getId());
                 }
             }

@@ -21,7 +21,7 @@ public class HTTPCall {
 
     public static Response call(CallRequest callRequest) {
         Response response = new Response();
-        String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTPCALL_SERVER_PORT + "/call";
+        String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTP_CALL_SERVER_PORT + "/call";
 
         long start = System.currentTimeMillis();
         HttpResponse execute = HttpRequest.post(url)

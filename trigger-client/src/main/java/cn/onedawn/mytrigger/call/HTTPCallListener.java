@@ -18,7 +18,7 @@ public class HTTPCallListener {
     private SimpleServer server;
 
     public void init() throws IOException {
-        server = HttpUtil.createServer(Integer.parseInt(ConstValue.HTTPCALL_SERVER_PORT));
+        server = HttpUtil.createServer(Integer.parseInt(ConstValue.HTTP_CALL_SERVER_PORT));
         server.addAction("/call", new HTTPCallAction())
                 .start();
     }

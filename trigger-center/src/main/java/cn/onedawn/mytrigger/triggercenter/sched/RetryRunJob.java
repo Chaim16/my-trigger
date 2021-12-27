@@ -4,11 +4,12 @@ import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.threadpool.NamedThreadFactory;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
-import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +25,36 @@ import java.util.concurrent.*;
  */
 @Service
 @DependsOn("beanService")
-public class RetryRunJob {
+public class RetryRunJob implements InitializingBean {
 
     Logger logger = LoggerFactory.getLogger(RetryRunJob.class);
     private JobService jobService;
     private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("retry-run-thread"));
-    private static final int retryRunJobScheduleTime = ConstValue.RETRY_RUN_JOB_SCHEDULE_TIME;
+    private static int retryRunJobScheduleTime;
 
-    public RetryRunJob() {
+    @Value("${retry.run.job.schedule.time}")
+    public void setRetryRunJobScheduleTime(int retryRunJobScheduleTime) {
+        RetryRunJob.retryRunJobScheduleTime = retryRunJobScheduleTime;
+    }
+
+    private void updateJobStatus(List<Job> jobs, JobStatusType jobStatusType) {
+        for (Job job : jobs) {
+            logger.info("retry run job failed, now change the status to callError, jobId:{}", job.getId());
+            job.setStatus(jobStatusType);
+            jobService.modify(job);
+        }
+    }
+
+    private void updateRunRetry(List<Job> jobs) {
+        for (Job job : jobs) {
+            logger.info("[retry run job], jobId:{}", job.getId());
+            job.setRunRetry(1);
+            jobService.modify(job);
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         logger.info("retry run job thread init");
         jobService = SpringBeanFactory.getBean(JobService.class);
         Runnable runnable = () -> {
@@ -68,21 +91,4 @@ public class RetryRunJob {
         int startTime = (int) (Math.random() * retryRunJobScheduleTime);
         executorService.scheduleAtFixedRate(runnable, startTime, retryRunJobScheduleTime, TimeUnit.SECONDS);
     }
-
-    private void updateJobStatus(List<Job> jobs, JobStatusType jobStatusType) {
-        for (Job job : jobs) {
-            logger.info("retry run job failed, now change the status to callError, jobId:{}", job.getId());
-            job.setStatus(jobStatusType);
-            jobService.modify(job);
-        }
-    }
-
-    private void updateRunRetry(List<Job> jobs) {
-        for (Job job : jobs) {
-            logger.info("[retry run job], jobId:{}", job.getId());
-            job.setRunRetry(1);
-            jobService.modify(job);
-        }
-    }
-
 }

@@ -4,15 +4,15 @@ import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.threadpool.NamedThreadFactory;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
-import cn.onedawn.mytrigger.triggercenter.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.SpringBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -25,30 +25,39 @@ import java.util.concurrent.*;
  */
 @Service
 @DependsOn("beanService")
-public class RetryCallErrorJob {
+public class RetryCallErrorJob implements InitializingBean {
 
     private static Logger logger = LoggerFactory.getLogger(RetryCallErrorJob.class);
     private JobService jobService;
     private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("retry-callerror-thread"));
-    private static int retryCallErrorJobCountThreshold = ConstValue.RETRY_CALL_ERROR_JOB_COUNT_THRESHOLD;
 
-    public RetryCallErrorJob() {
+    private static int retryCallErrorJobCountThreshold;
+    private static int retryCallErrorJobScheduleTime;
+
+    @Value("${retry.call.error.job.count.threshold}")
+    public void setRetryCallErrorJobCountThreshold(int retryCallErrorJobCountThreshold) {
+        RetryCallErrorJob.retryCallErrorJobCountThreshold = retryCallErrorJobCountThreshold;
+    }
+
+    @Value("${retry.call.error.job.schedule.time}")
+    public void setRetryCallErrorJobScheduleTime(int retryCallErrorJobScheduleTime) {
+        RetryCallErrorJob.retryCallErrorJobScheduleTime = retryCallErrorJobScheduleTime;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
         logger.info("retry callError job thread init");
         jobService = SpringBeanFactory.getBean(JobService.class);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 try {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ConstValue.TIME_PATTERN);
-                    long time = System.currentTimeMillis() - TimeUnit.SECONDS.toMillis(retryCallErrorJobCountThreshold);
-                    String dataString = simpleDateFormat.format(new Date(time));
-
                     int retryCount = 0;
                     long start, end;
                     do {
                         List<Future> futures;
                         start = System.currentTimeMillis();
-                        List<Job> jobs = CallEnter.findCallErrorJobs(jobService, retryCallErrorJobCountThreshold);
+                        List<Job> jobs = CallEnter.findCallErrorJobs(jobService, retryCallErrorJobScheduleTime);
                         retryCount = jobs.size();
                         end = System.currentTimeMillis();
                         logger.info("retry callError job thread get {} jobs, time consuming:{} ms", retryCount, end - start);
@@ -75,9 +84,10 @@ public class RetryCallErrorJob {
                     int retryCount = job.getCallerrorRetryCount() + 1;
                     job.setCallerrorRetryCount(retryCount);
                     // 最多重试十次，还不成功就删除
-                    if (retryCount > ConstValue.RETRY_CALL_ERROR_JOB_COUNT_THRESHOLD) {
+                    if (retryCount > retryCallErrorJobCountThreshold) {
                         jobService.remove(job.getId());
                         // 日志记录
+                        logger.error("find a job has retried 10 counts but failed, now remove it, jobId : {}", job.getId());
                     } else {
                         jobService.modify(job);
                     }
@@ -85,7 +95,7 @@ public class RetryCallErrorJob {
             }
         };
         // 10分钟后重试
-        int startTime = (int) (Math.random() * retryCallErrorJobCountThreshold);
-        executorService.scheduleAtFixedRate(runnable, startTime, retryCallErrorJobCountThreshold, TimeUnit.SECONDS);
+        int startTime = (int) (Math.random() * retryCallErrorJobScheduleTime);
+        executorService.scheduleAtFixedRate(runnable, startTime, retryCallErrorJobScheduleTime, TimeUnit.SECONDS);
     }
 }
