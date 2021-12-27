@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
  * @author qingming yu
  * @version 1.0.0
  * @ClassName TriggerJob.java
- * @Description TODO
+ * @Description TODO 持续扫表，拉起任务进行调度
  * @createTime 2021年11月02日 18:08:00
  */
 @Service
@@ -29,7 +29,7 @@ public class TriggerJob {
     private static Logger logger = LoggerFactory.getLogger(TriggerJob.class);
 
     private JobService jobService;
-    private static final long schedTime = ConstValue.TRIGGER_SCHED_TIME;
+    private static final long triggerScheduleTime = ConstValue.TRIGGER_SCHEDULE_TIME;
 
     public TriggerJob() {
         logger.info("trigger job thread init");
@@ -45,7 +45,7 @@ public class TriggerJob {
                         processCore();
                         long end = System.currentTimeMillis();
 
-                        long sleepTime = schedTime - (end - start);
+                        long sleepTime = triggerScheduleTime - (end - start);
                         if (sleepTime > 0) {
                             Thread.sleep(sleepTime);
                         }

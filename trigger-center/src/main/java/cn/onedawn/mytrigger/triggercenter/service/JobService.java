@@ -39,4 +39,6 @@ public interface JobService {
     List<Job> findJob(String sql);
 
     App findAppById(Long app);
+
+    int deleteRemoveJobs();
 }

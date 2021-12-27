@@ -1,6 +1,5 @@
 package cn.onedawn.mytrigger.threadpool;
 
-import cn.onedawn.mytrigger.exception.MyTriggerException;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.RejectedExecutionHandler;

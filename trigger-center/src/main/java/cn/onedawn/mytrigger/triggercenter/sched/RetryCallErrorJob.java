@@ -20,7 +20,7 @@ import java.util.concurrent.*;
  * @author qingming yu
  * @version 1.0.0
  * @ClassName RetryCallErrorJob.java
- * @Description TODO
+ * @Description TODO 定时重试调度失败的任务
  * @createTime 2021年12月21日 13:19:00
  */
 @Service
@@ -28,10 +28,9 @@ import java.util.concurrent.*;
 public class RetryCallErrorJob {
 
     private static Logger logger = LoggerFactory.getLogger(RetryCallErrorJob.class);
-
     private JobService jobService;
-
     private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("retry-callerror-thread"));
+    private static int retryCallErrorJobCountThreshold = ConstValue.RETRY_CALL_ERROR_JOB_COUNT_THRESHOLD;
 
     public RetryCallErrorJob() {
         logger.info("retry callError job thread init");
@@ -41,16 +40,15 @@ public class RetryCallErrorJob {
             public void run() {
                 try {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ConstValue.TIME_PATTERN);
-                    long time = System.currentTimeMillis() - TimeUnit.SECONDS.toMillis(ConstValue.RETRY_CALL_ERROR_JOB_THRESHOLD_TIME);
+                    long time = System.currentTimeMillis() - TimeUnit.SECONDS.toMillis(retryCallErrorJobCountThreshold);
                     String dataString = simpleDateFormat.format(new Date(time));
 
                     int retryCount = 0;
                     long start, end;
                     do {
                         List<Future> futures;
-                        retryCount = 0;
                         start = System.currentTimeMillis();
-                        List<Job> jobs = CallEnter.findCallErrorJobs(jobService, ConstValue.RETRY_CALL_ERROR_JOB_COUNT_THRESHOLD);
+                        List<Job> jobs = CallEnter.findCallErrorJobs(jobService, retryCallErrorJobCountThreshold);
                         retryCount = jobs.size();
                         end = System.currentTimeMillis();
                         logger.info("retry callError job thread get {} jobs, time consuming:{} ms", retryCount, end - start);
@@ -87,7 +85,7 @@ public class RetryCallErrorJob {
             }
         };
         // 10分钟后重试
-        int startTime = (int)(Math.random() * ConstValue.RETRY_CALL_ERROR_JOB_SCHEDULE_TIME);
-        executorService.scheduleAtFixedRate(runnable, startTime, ConstValue.RETRY_CALL_ERROR_JOB_SCHEDULE_TIME, TimeUnit.SECONDS);
+        int startTime = (int) (Math.random() * retryCallErrorJobCountThreshold);
+        executorService.scheduleAtFixedRate(runnable, startTime, retryCallErrorJobCountThreshold, TimeUnit.SECONDS);
     }
 }

@@ -141,4 +141,9 @@ public class JobServiceImpl implements JobService {
     public App findAppById(Long appId) {
         return jobMapper.selectAppById(appId);
     }
+
+    @Override
+    public int deleteRemoveJobs() {
+        return jobMapper.deleteRemovejob();
+    }
 }

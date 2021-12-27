@@ -19,7 +19,7 @@ import java.util.concurrent.*;
  * @author qingming yu
  * @version 1.0.0
  * @ClassName RetryRunJob.java
- * @Description TODO
+ * @Description TODO 定时重试调度之后没有ACK的任务（run）
  * @createTime 2021年12月21日 15:17:00
  */
 @Service
@@ -27,11 +27,8 @@ import java.util.concurrent.*;
 public class RetryRunJob {
 
     Logger logger = LoggerFactory.getLogger(RetryRunJob.class);
-
     private JobService jobService;
-
     private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("retry-run-thread"));
-
     private static final int retryRunJobScheduleTime = ConstValue.RETRY_RUN_JOB_SCHEDULE_TIME;
 
     public RetryRunJob() {
@@ -41,7 +38,6 @@ public class RetryRunJob {
             try {
                 int retryCount;
                 do {
-                    retryCount = 0;
                     long start, end;
                     start = System.currentTimeMillis();
                     List<Job> jobs = CallEnter.findRunJobs(jobService, false);
@@ -69,7 +65,7 @@ public class RetryRunJob {
             }
         };
         // 30分钟后重试
-        int startTime = (int)(Math.random() * retryRunJobScheduleTime);
+        int startTime = (int) (Math.random() * retryRunJobScheduleTime);
         executorService.scheduleAtFixedRate(runnable, startTime, retryRunJobScheduleTime, TimeUnit.SECONDS);
     }
 

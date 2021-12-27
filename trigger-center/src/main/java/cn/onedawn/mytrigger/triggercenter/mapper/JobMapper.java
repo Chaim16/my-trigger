@@ -35,4 +35,6 @@ public interface JobMapper {
     App selectAppById(Long appId);
 
     Job selectJobById(Long jobId);
+
+    int deleteRemovejob();
 }

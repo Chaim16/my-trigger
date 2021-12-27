@@ -1,0 +1,4 @@
+cn\onedawn\triggertest\tasks\dubboCallTest.class
+cn\onedawn\triggertest\TriggerTestApplication.class
+cn\onedawn\triggertest\controller\MyController.class
+cn\onedawn\triggertest\listener\DubboListener.class
