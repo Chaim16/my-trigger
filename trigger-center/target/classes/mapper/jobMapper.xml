@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.onedawn.mytrigger.triggercenter.mapper.JobMapper">
     <insert id="register" parameterType="cn.onedawn.mytrigger.pojo.Job">
-        insert into 任务
+        insert into job
         values (null,
                 #{status},
                 #{triggerTime},
@@ -21,7 +21,7 @@
     </insert>
 
     <update id="modify" parameterType="cn.onedawn.mytrigger.pojo.Job">
-        update 任务
+        update job
         set status      = #{status},
             trigger_time = #{triggerTime},
             remove      = #{remove},
@@ -38,13 +38,13 @@
     </update>
 
     <update id="remove" parameterType="java.lang.Long">
-        update 任务
+        update job
         set remove = 1, modify_time = now()
         where id = #{id};
     </update>
 
     <update id="pause" parameterType="java.lang.Long">
-        update 任务
+        update job
         set status = "pause", modify_time = now()
         where id = #{id};
     </update>
@@ -68,12 +68,12 @@
 
     <select id="selectAllJobByAppId" parameterType="java.lang.Long" resultMap="selectJobMap">
         select *
-        from 任务
+        from job
         where app = #{id} and remove = 0;
     </select>
 
     <update id="updateStatusByJobId">
-        update 任务
+        update job
         set status = #{status}, modify_time = now()
         where id = #{id};
     </update>
@@ -83,7 +83,7 @@
     </select>
 
     <update id="ack" parameterType="java.lang.Long">
-        update 任务
+        update job
         set status = 'finished', modify_time = now()
         where id = #{jobId}
     </update>
@@ -95,15 +95,15 @@
     </resultMap>
 
     <select id="selectAppById" parameterType="java.lang.Long" resultMap="selectAppMap">
-        select * from 应用 where id = #{appId}
+        select * from job where id = #{appId}
     </select>
 
     <select id="selectJobById" parameterType="java.lang.Long" resultMap="selectJobMap">
-        select * from 任务 where id = #{jobId}
+        select * from job where id = #{jobId}
     </select>
 
     <delete id="deleteRemovejob">
-        delete from 任务 where remove = 1;
+        delete from job where remove = 1;
     </delete>
 
 </mapper>

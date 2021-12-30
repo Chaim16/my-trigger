@@ -1,10 +1,13 @@
 package cn.onedawn.mytrigger.triggercenter;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.App;
 import cn.onedawn.mytrigger.pojo.Job;
+import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.impl.*;
+import cn.onedawn.mytrigger.response.Response;
 import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.ConstValue;
@@ -17,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SpringBootTest
-class JobAndAppTest {
+class JobAndAppAndUserTest {
 
     /**
      * 应用注册测试
@@ -134,28 +137,26 @@ class JobAndAppTest {
         System.out.println(body);
     }
 
-    /**
-     * HTTP注册
-     */
+
     @Test
-    void contextLoads() {
-        Map<String, Object> formMap = new HashMap<>();
+    public void userRegisterTest() {
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("qingming");
+        user.setPassword("789");
+        user.setProhibit((byte) 0);
         RegisterRequest registerRequest = new RegisterRequest();
-        Job job = new Job();
-        job.setStatus(JobStatusType.wait);
-        job.setCron("* * * * * ?")
-                .setRemove((byte) 0)
-                .setApp(1L)
-                .setCallName("call")
-                .setCallType(CallType.dubbo);
-        registerRequest.setJob(job);
-        formMap.put("data", JSON.toJSONString(registerRequest));
-        String body = HttpRequest.post("http://localhost:8080/job/register")
+        registerRequest.setUser(user);
+
+        String url = "http://127.0.0.1:8080/user/register";
+        Map<String, Object> formMap = new HashMap<>();
+        formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(registerRequest));
+        HttpResponse insertToCenterResponse = HttpRequest.post(url)
                 .form(formMap)
                 .timeout(5000)
-                .execute()
-                .body();
-        System.out.println(body);
+                .execute();
+        Response response = JSON.parseObject(insertToCenterResponse.body(), Response.class);
+        System.out.println(JSON.toJSONString(response));
     }
 
 }

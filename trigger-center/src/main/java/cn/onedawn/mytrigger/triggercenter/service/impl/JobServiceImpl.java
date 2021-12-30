@@ -48,7 +48,7 @@ public class JobServiceImpl implements JobService {
         } catch (MyTriggerException e) {
             logger.error("[register job] get onetime failed, jobId:{}", job.getId());
         }
-        return jobMapper.register(job);
+        return jobMapper.register(job) > 0;
     }
 
     @Override

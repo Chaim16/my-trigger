@@ -24,5 +24,5 @@ public class User implements Serializable {
     private String password;
 
     @JSONField(name = "prohibit")
-    private Boolean prohibit;
+    private byte prohibit;
 }

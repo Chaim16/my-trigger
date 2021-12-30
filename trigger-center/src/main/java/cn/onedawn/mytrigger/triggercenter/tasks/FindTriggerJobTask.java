@@ -19,6 +19,6 @@ public class FindTriggerJobTask extends AbstractSelectTask {
 
     @Override
     protected String getSelectSql() {
-        return "select * from 任务 where status = 'wait' and remove = 0 and trigger_time < now() order by trigger_time LIMIT 100";
+        return "select * from job where status = 'wait' and remove = 0 and trigger_time < now() order by trigger_time LIMIT 100";
     }
 }

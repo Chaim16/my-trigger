@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Mapper
 public interface JobMapper {
-    boolean register(Job job);
+    int register(Job job);
 
     int modify(Job job);
 

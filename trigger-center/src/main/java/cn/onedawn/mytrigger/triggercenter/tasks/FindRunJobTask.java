@@ -20,6 +20,6 @@ public class FindRunJobTask extends AbstractSelectTask{
 
     @Override
     protected String getSelectSql() {
-        return "select * from 任务 where status = 'run' and remove = 0 and modify_time < now() and run_retry = " + (retried ? 1 : 0);
+        return "select * from job where status = 'run' and remove = 0 and modify_time < now() and run_retry = " + (retried ? 1 : 0);
     }
 }
