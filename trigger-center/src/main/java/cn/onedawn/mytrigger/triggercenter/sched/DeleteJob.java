@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author qingming yu
