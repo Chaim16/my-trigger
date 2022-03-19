@@ -1,10 +1,10 @@
 package cn.onedawn.mytrigger.triggercenter.controller;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.request.impl.RegisterRequest;
 import cn.onedawn.mytrigger.response.Response;
-import cn.onedawn.mytrigger.triggercenter.service.AppService;
+import cn.onedawn.mytrigger.triggercenter.service.ApplicationService;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -19,17 +19,17 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author qingming yu
  * @version 1.0.0
- * @ClassName AppController.java
+ * @ClassName ApplicationController.java
  * @Description TODO
  * @createTime 2021年10月26日 16:34:00
  */
 @RestController
-@RequestMapping("/app")
-public class AppController {
-    private static Logger logger = LoggerFactory.getLogger(AppController.class);
+@RequestMapping("/application")
+public class ApplicationController {
+    private static Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
     @Autowired
-    private AppService appService;
+    private ApplicationService appService;
 
     @RequestMapping("/register")
     public Response register(HttpServletRequest request ){
@@ -40,7 +40,7 @@ public class AppController {
 
             String requestData = request.getParameter(ConstValue.REQUEST_DATA);
             registerRequest = JSON.parseObject(requestData, RegisterRequest.class);
-            App app = registerRequest.getApp();
+            Application app = registerRequest.getApp();
 
             boolean result = appService.register(app);
             long end = System.currentTimeMillis();
@@ -56,7 +56,7 @@ public class AppController {
 
     @RequestMapping("/findAppIdByAppName")
     public String findAppIdByAppName(HttpServletRequest request) throws MyTriggerException {
-        String appName = request.getParameter("appName");
+        String appName = request.getParameter("name");
         if (appName == null || appName.trim().length() == 0) {
             logger.error("appName id null or black");
             throw new MyTriggerException("appName is null or black");

@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.call;
 
 import cn.onedawn.mytrigger.api.CallHandler;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
@@ -22,16 +22,16 @@ public class DubboCallServiceListener {
     private ApplicationConfig applicationConfig;
     private ProtocolConfig protocolConfig;
 
-    private App app;
+    private Application app;
 
     public void init() {
         registryConfig = new RegistryConfig();
         registryConfig.setAddress(ConstValue.ZOOKEEPER_ADDRESS);
         registryConfig.setProtocol("zookeeper");
-        registryConfig.setTimeout(10000);
+        registryConfig.setTimeout(100000);
 
         protocolConfig = new ProtocolConfig(ConstValue.DUBBO_PROTOCOL, ConstValue.DUBBO_PROTOCOL_PORT);
-        applicationConfig = new ApplicationConfig("my-trigger-client-" + this.app.getAppName());
+        applicationConfig = new ApplicationConfig("my-trigger-client-" + this.app.getName());
 
         serviceConfig = new ServiceConfig<CallHandler>();
         serviceConfig.setApplication(applicationConfig);
@@ -45,11 +45,11 @@ public class DubboCallServiceListener {
         System.out.println("dubbo call listener prepare ok");
     }
 
-    public App getApp() {
+    public Application getApp() {
         return app;
     }
 
-    public void setApp(App app) {
+    public void setApp(Application app) {
         this.app = app;
     }
 }

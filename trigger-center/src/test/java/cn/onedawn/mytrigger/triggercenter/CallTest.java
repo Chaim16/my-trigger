@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
@@ -37,9 +37,9 @@ public class CallTest {
 
         CallRequest callRequest = new CallRequest();
         callRequest.setJob(job)
-                .setApp(new App()
-                        .setAppId("1")
-                        .setAppName("mayi"));
+                .setApp(new Application()
+                        .setCreateTime("1")
+                        .setName("mayi"));
 
         DubboCallServiceClient dubboCallServiceClient = new DubboCallServiceClient();
         Response response = dubboCallServiceClient.callback(callRequest);
@@ -63,10 +63,10 @@ public class CallTest {
 
         CallRequest callRequest = new CallRequest();
         callRequest.setJob(job)
-                .setApp(new App()
+                .setApp(new Application()
                         .setId(4L)
-                        .setAppId("1")
-                        .setAppName("mayi"));
+                        .setCreateTime("1")
+                        .setName("mayi"));
 
         Response response = HTTPCall.call(callRequest);
         System.out.println(response);

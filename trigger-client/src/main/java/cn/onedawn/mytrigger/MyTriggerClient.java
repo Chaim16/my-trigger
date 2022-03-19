@@ -5,7 +5,7 @@ import cn.hutool.http.HttpResponse;
 import cn.onedawn.mytrigger.call.DubboCallServiceListener;
 import cn.onedawn.mytrigger.call.HTTPCallListener;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CommonRequest;
 import cn.onedawn.mytrigger.request.impl.ModifyRequest;
@@ -52,7 +52,7 @@ public class MyTriggerClient {
     private CallType callType = CallType.dubbo;
     private String callHost;
 
-    private App app;
+    private Application app;
     private boolean closed;
 
     /**
@@ -64,13 +64,13 @@ public class MyTriggerClient {
      */
     public void init(String appName) throws MyTriggerException, IOException {
         // 查询appId
-        String url = ConstValue.BASE_URL + "/app/findAppIdByAppName?appName=" + appName;
+        String url = ConstValue.BASE_URL + "/application/findAppIdByAppName?name=" + appName;
         HttpResponse response = HttpRequest.get(url).timeout(5000).execute();
 
         if (response.getStatus() == StatusCode.SUCCESS) {
             String body = response.body();
-            app = new App()
-                    .setAppName(appName)
+            app = new Application()
+                    .setName(appName)
                     .setId(Long.valueOf(body));
         } else {
             throw new MyTriggerException("find appId faild");

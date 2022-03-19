@@ -48,10 +48,10 @@ public class TaskExecutor {
                     new DiscardAndMessagePolicy()
             );
 
-    private static ThreadPoolExecutor monitorPoolExecutor =
+    private static ThreadPoolExecutor threadFindJobPoolExecutor =
             new ThreadPoolExecutor(CORE_POOL_SIZE,MAX_POOL_SIZE,60, TimeUnit.SECONDS,
-                    new LinkedBlockingQueue(50000),
-                    new NamedThreadFactory("mytrigger-center-monitor"),
+                    new LinkedBlockingQueue(5000),
+                    new NamedThreadFactory("mytrigger-center"),
                     new DiscardAndMessagePolicy()
             );
 
@@ -75,8 +75,8 @@ public class TaskExecutor {
         return threadDeleteJobPoolExecutor;
     }
 
-    public static ThreadPoolExecutor getMonitorPoolExecutor() {
-        return monitorPoolExecutor;
-    }
 
+    public static ThreadPoolExecutor getThreadFindJobPoolExecutor() {
+        return threadFindJobPoolExecutor;
+    }
 }

@@ -18,6 +18,6 @@ public class FindCallErrorJobTask extends AbstractSelectTask{
     }
     @Override
     protected String getSelectSql() {
-        return "select * from job where status = 'callerror' and remove = 0 and callerror_retry_count < " + this.callerrorRetryCountThreshold + " and modify_time < now() order by trigger_time limit 10";
+        return "select * from trigger_job where status = 'callerror' and remove = 0 and callerror_retry_count < " + this.callerrorRetryCountThreshold + " and modify_time < now() order by trigger_time limit 10";
     }
 }

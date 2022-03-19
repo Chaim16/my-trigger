@@ -2,7 +2,7 @@ package cn.onedawn.mytrigger.triggercenter.call;
 
 import cn.onedawn.mytrigger.api.CallHandler;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
@@ -78,12 +78,12 @@ public class DubboCallServiceClient {
     }
 
     public Response callback(CallRequest callRequest) throws MyTriggerException {
-        App app = callRequest.getApp();
+        Application app = callRequest.getApp();
         Job job = callRequest.getJob();
 
-        ReferenceConfig<CallHandler> referenceConfig = getReferenceConfig(app.getAppName(), job.getCallHost());
+        ReferenceConfig<CallHandler> referenceConfig = getReferenceConfig(app.getName(), job.getCallHost());
         CallHandler callbackService = null;
-        callbackService = getCallHandler(referenceConfig, app.getAppName(), job.getCallHost());
+        callbackService = getCallHandler(referenceConfig, app.getName(), job.getCallHost());
         if (callbackService == null) {
             logger.error("mytrigger center callback by dubbo can't find service task: {}", JSON.toJSONString(callRequest));
             throw new MyTriggerException("mytrigger center callback by dubbo can't find service");

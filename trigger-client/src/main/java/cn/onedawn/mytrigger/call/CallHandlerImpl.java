@@ -22,8 +22,10 @@ public class CallHandlerImpl implements CallHandler {
         Job job = callRequest.getJob();
         String callName = job.getCallName();
         Task task = (Task) SpringBeanFactory.getBean(callName);
+
         ExecuteAndAck executeAndAck = new ExecuteAndAck(task, callRequest);
         TaskExecutor.submit(executeAndAck);
+
         long end = System.currentTimeMillis();
 
         return new Response()

@@ -1,6 +1,6 @@
 package cn.onedawn.mytrigger.triggercenter.mapper;
 
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,7 +32,7 @@ public interface JobMapper {
 
     int ack(Long jobId);
 
-    App selectAppById(Long appId);
+    Application selectAppById(Long appId);
 
     Job selectJobById(Long jobId);
 

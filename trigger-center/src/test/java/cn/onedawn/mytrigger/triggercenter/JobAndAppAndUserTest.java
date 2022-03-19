@@ -3,7 +3,7 @@ package cn.onedawn.mytrigger.triggercenter;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.impl.*;
@@ -15,12 +15,16 @@ import com.alibaba.fastjson.JSON;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @SpringBootTest
 class JobAndAppAndUserTest {
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat(ConstValue.TIME_PATTERN);
 
     /**
      * 应用注册测试
@@ -29,11 +33,12 @@ class JobAndAppAndUserTest {
     public void appRegisterTest() throws MyTriggerException {
         Map<String, Object> formMap = new HashMap<>();
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setApp(new App(1L, "mayi", String.valueOf(UUID.randomUUID())));
+        Date date = new Date();
+        registerRequest.setApp(new Application(null, "mayi", dateFormat.format(date), dateFormat.format(date)));
         registerRequest.check();
         formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(registerRequest));
 
-        String body = HttpRequest.post("http://localhost:8080/app/register")
+        String body = HttpRequest.post("http://localhost:8080/application/register")
                 .form(formMap)
                 .timeout(5000)
                 .execute()

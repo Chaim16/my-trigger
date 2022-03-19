@@ -18,8 +18,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class App implements Serializable {
+public class Application implements Serializable {
     private Long id;
-    private String appName;
-    private String appId;
+    private String name;
+    private String createTime;
+    private String modifyTime;
 }

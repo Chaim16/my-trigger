@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.controller;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.*;
 import cn.onedawn.mytrigger.response.Response;
@@ -47,7 +47,6 @@ public class JobController {
             registerRequest.check();
             job = registerRequest.getJob();
             result = jobService.register(job);
-
         } catch (ParseException | MyTriggerException e) {
             response.setSuccess(result);
             response.setInfo(JSON.toJSONString(null));
@@ -149,7 +148,7 @@ public class JobController {
     public Response findAllJob(HttpServletRequest request) {
         Response response = new Response();
         long start = System.currentTimeMillis();
-        App app = null;
+        Application app = null;
         List<Job> jobs = null;
         try {
             String requestData = request.getParameter(ConstValue.REQUEST_DATA);

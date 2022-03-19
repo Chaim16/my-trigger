@@ -1,6 +1,6 @@
 package cn.onedawn.mytrigger.triggercenter.mapper;
 
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,8 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
  * @createTime 2021年10月26日 17:31:00
  */
 @Mapper
-public interface AppMapper {
-    int register(App app);
+public interface ApplicationMapper {
+    int register(Application app);
 
     Long selectAppIdByAppName(String appName);
 }

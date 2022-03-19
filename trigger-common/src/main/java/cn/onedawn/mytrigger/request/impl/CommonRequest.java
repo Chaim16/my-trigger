@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.request.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.Request;
@@ -25,7 +25,7 @@ public class CommonRequest extends Request {
     private Job job;
 
     @JSONField(name = "app")
-    private App app;
+    private Application app;
 
     @JSONField(name = "user")
     private User user;

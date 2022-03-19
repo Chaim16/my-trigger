@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.request.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.Request;
@@ -30,7 +30,7 @@ public class ModifyRequest extends Request {
     private Job job;
 
     @JSONField(name = "app")
-    private App app;
+    private Application app;
 
     @JSONField(name = "user")
     private User user;
@@ -51,8 +51,8 @@ public class ModifyRequest extends Request {
             }
         }
         if (app != null) {
-            StringUtils.isEmpty(String.valueOf(app.getAppName()), "appName is empty");
-            StringUtils.isEmpty(String.valueOf(app.getAppId()), "appId is empty");
+            StringUtils.isEmpty(String.valueOf(app.getName()), "appName is empty");
+            StringUtils.isEmpty(String.valueOf(app.getCreateTime()), "appId is empty");
         }
     }
 

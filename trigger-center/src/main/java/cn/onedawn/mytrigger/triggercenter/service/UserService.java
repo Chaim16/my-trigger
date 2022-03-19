@@ -1,8 +1,14 @@
 package cn.onedawn.mytrigger.triggercenter.service;
 
+import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.pojo.User;
+import cn.onedawn.mytrigger.triggercenter.tasks.CallEnter;
+import lombok.SneakyThrows;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @author qingming yu

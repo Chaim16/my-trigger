@@ -22,7 +22,7 @@ public class CallEnter {
      * 获取即将要调度的任务
      */
     public static List<Job> findTriggerJobs(JobService jobService) throws ExecutionException, InterruptedException {
-        Future submit = TaskExecutor.getThreadPoolExecutor()
+        Future submit = TaskExecutor.getThreadFindJobPoolExecutor()
                 .submit(new FindTriggerJobTask(jobService));
         List<Job> jobs = (List<Job>) submit.get();
         return jobs;

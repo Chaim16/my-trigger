@@ -1,18 +1,11 @@
 package cn.onedawn.mytrigger.request.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
-import cn.onedawn.mytrigger.pojo.Job;
-import cn.onedawn.mytrigger.pojo.User;
 import cn.onedawn.mytrigger.request.Request;
 import cn.onedawn.mytrigger.type.RequestType;
-import cn.onedawn.mytrigger.utils.CronUtil;
 import cn.onedawn.mytrigger.utils.NumberUtils;
-import cn.onedawn.mytrigger.utils.StringUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * @author qingming yu

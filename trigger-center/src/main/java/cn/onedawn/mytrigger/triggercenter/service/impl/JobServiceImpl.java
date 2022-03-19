@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.service.impl;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.mapper.JobMapper;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
@@ -138,7 +138,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public App findAppById(Long appId) {
+    public Application findAppById(Long appId) {
         return jobMapper.selectAppById(appId);
     }
 

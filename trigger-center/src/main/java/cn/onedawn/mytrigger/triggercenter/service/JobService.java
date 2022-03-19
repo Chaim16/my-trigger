@@ -1,12 +1,10 @@
 package cn.onedawn.mytrigger.triggercenter.service;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
-import cn.onedawn.mytrigger.request.Request;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
@@ -38,7 +36,7 @@ public interface JobService {
 
     List<Job> findJob(String sql);
 
-    App findAppById(Long app);
+    Application findAppById(Long app);
 
     int deleteRemoveJobs();
 }

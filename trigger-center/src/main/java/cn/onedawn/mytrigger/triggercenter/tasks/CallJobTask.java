@@ -1,7 +1,7 @@
 package cn.onedawn.mytrigger.triggercenter.tasks;
 
 import cn.onedawn.mytrigger.exception.MyTriggerException;
-import cn.onedawn.mytrigger.pojo.App;
+import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.response.Response;
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -66,7 +65,7 @@ public class CallJobTask implements Callable {
     }
 
     private void doCall(Job job) throws MyTriggerException {
-        App app = jobService.findAppById(job.getApp());
+        Application app = jobService.findAppById(job.getApp());
         jobService.updateStatusByJobId(job.getId(), JobStatusType.run);
 
         CallRequest callRequest = new CallRequest();
