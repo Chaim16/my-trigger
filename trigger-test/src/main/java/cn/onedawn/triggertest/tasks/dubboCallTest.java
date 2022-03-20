@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Description TODO
  * @createTime 2021年10月30日 13:53:00
  */
-@Component("dubboCallTest")
+@Component("call1")
 public class dubboCallTest implements Task {
 
     @Override

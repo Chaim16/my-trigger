@@ -1,0 +1,10 @@
+cn\onedawn\mytrigger\call\DubboCallServiceListener.class
+cn\onedawn\mytrigger\call\HTTPCallAction.class
+cn\onedawn\mytrigger\call\HTTPCallListener.class
+cn\onedawn\mytrigger\MyTriggerClient.class
+cn\onedawn\mytrigger\submit\RocketMQStrategy.class
+cn\onedawn\mytrigger\submit\HTTPStrategy.class
+cn\onedawn\mytrigger\call\Task.class
+cn\onedawn\mytrigger\call\CallHandlerImpl.class
+cn\onedawn\mytrigger\excutor\TaskExecutor.class
+cn\onedawn\mytrigger\excutor\ExecuteAndAck.class

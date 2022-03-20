@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @Description TODO
  * @createTime 2021年11月02日 16:48:00
  */
-@Component
+@Component()
 public class DubboListener implements InitializingBean {
 
     @Override

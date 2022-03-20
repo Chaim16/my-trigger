@@ -3,9 +3,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mytrigger?useUnicode=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/mytrigger
     username: root
-    password: 123456
+    password: YQM@0229yqm
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
