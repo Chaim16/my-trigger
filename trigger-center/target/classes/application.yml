@@ -18,6 +18,11 @@ logging:
   file:
     path: D:/logs/my-trigger
 
+elasticsearch:
+  host: 10.67.37.210
+  port: 9200
+  index:
+    name: 'my-trigger'
 
 # 调度的时间时间间隔以及立即重试次数
 trigger:

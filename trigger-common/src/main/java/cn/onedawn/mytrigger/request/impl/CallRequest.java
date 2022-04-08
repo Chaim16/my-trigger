@@ -44,10 +44,6 @@ public class CallRequest extends Request implements Serializable {
             if (job.getCallType() == CallType.http) {
                 StringUtils.isEmpty(String.valueOf(job.getCallHost()), "callHost is empty");
             }
-            Date cronDate = CronUtil.formatDateByCron(job.getCron(), System.currentTimeMillis());
-            if (cronDate.getTime() < System.currentTimeMillis()) {
-                throw new MyTriggerException("cron time before current time: date:" + cronDate);
-            }
         }
         if (app != null) {
             StringUtils.isEmpty(String.valueOf(app.getName()), "appName is empty");

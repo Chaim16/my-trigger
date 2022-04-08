@@ -32,9 +32,9 @@ public interface JobMapper {
 
     int ack(Long jobId);
 
-    Application selectAppById(Long appId);
-
     Job selectJobById(Long jobId);
 
     int deleteRemovejob();
+
+    List<Job> selectRemoveJobs();
 }

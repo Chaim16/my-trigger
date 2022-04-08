@@ -6,6 +6,7 @@ import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface JobService {
 
     boolean pause(Long jobId);
 
-    boolean ack(Long jobId) throws MyTriggerException, ParseException;
+    boolean ack(Long jobId) throws MyTriggerException, ParseException, IOException;
 
     List<Job> findAllJobByApp(Long id);
 
@@ -39,4 +40,6 @@ public interface JobService {
     Application findAppById(Long app);
 
     int deleteRemoveJobs();
+
+    List<Job> findRemoveJobs();
 }

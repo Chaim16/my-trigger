@@ -10,4 +10,15 @@
         select id from application where name = #{appName}
     </select>
 
+    <resultMap id="selectAppMap" type="cn.onedawn.mytrigger.pojo.Application">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="modifyTime" column="modify_time"></result>
+    </resultMap>
+
+    <select id="selectAppById" parameterType="java.lang.Long" resultMap="selectAppMap">
+        select * from application where id = #{appId}
+    </select>
+
 </mapper>

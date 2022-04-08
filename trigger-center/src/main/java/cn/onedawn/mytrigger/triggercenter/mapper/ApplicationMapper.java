@@ -15,4 +15,7 @@ public interface ApplicationMapper {
     int register(Application app);
 
     Long selectAppIdByAppName(String appName);
+
+
+    Application selectAppById(Long appId);
 }

@@ -88,17 +88,6 @@
         where id = #{jobId}
     </update>
 
-    <resultMap id="selectAppMap" type="cn.onedawn.mytrigger.pojo.Application">
-        <result property="id" column="id"></result>
-        <result property="name" column="name"></result>
-        <result property="createTime" column="create_time"></result>
-        <result property="modifyTime" column="modify_time"></result>
-    </resultMap>
-
-    <select id="selectAppById" parameterType="java.lang.Long" resultMap="selectAppMap">
-        select * from application where id = #{appId}
-    </select>
-
     <select id="selectJobById" parameterType="java.lang.Long" resultMap="selectJobMap">
         select * from trigger_job where id = #{jobId}
     </select>
@@ -106,5 +95,9 @@
     <delete id="deleteRemovejob">
         delete from trigger_job where remove = 1;
     </delete>
+
+    <select id="selectRemoveJobs" resultMap="selectJobMap">
+        select * from job where remove = 0;
+    </select>
 
 </mapper>

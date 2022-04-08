@@ -3,20 +3,39 @@ package cn.onedawn.mytrigger.triggercenter.service.impl;
 import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
+import cn.onedawn.mytrigger.triggercenter.mapper.ApplicationMapper;
 import cn.onedawn.mytrigger.triggercenter.mapper.JobMapper;
+import cn.onedawn.mytrigger.triggercenter.sched.DeleteJob;
+import cn.onedawn.mytrigger.triggercenter.service.ElasticsearchService;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.CronUtil;
+import cn.onedawn.mytrigger.utils.SpringBeanFactory;
+import org.apache.http.HttpHost;
+import org.elasticsearch.ElasticsearchException;
+import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.rest.RestStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author qingming yu
@@ -32,6 +51,9 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private JobMapper jobMapper;
+
+    @Autowired
+    private ApplicationMapper applicationMapper;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat(ConstValue.TIME_PATTERN);
 
@@ -98,12 +120,20 @@ public class JobServiceImpl implements JobService {
      * 如果是周期性调度，则更新状态和下一次调度时间
      */
     @Override
-    public boolean ack(Long jobId) throws MyTriggerException, ParseException {
+    public boolean ack(Long jobId) throws MyTriggerException, ParseException, IOException {
         Job job = findJobById(jobId);
+        Application app = applicationMapper.selectAppById(job.getApp());
         // 一次性任务
         if (CronUtil.checkCronOneTime(job.getCron())) {
             remove(jobId);
-            return jobMapper.ack(jobId) > 0;
+            boolean result = jobMapper.ack(jobId) > 0;
+            job.setStatus(JobStatusType.finish);
+            if (result) {
+                // 往ES里面存
+                ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
+                elasticsearchService.Index(job, app);
+            }
+            return result;
         } else { // 周期性任务
             if (job.getRemove() == 1) {
                 job.setStatus(JobStatusType.finish);
@@ -139,11 +169,16 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Application findAppById(Long appId) {
-        return jobMapper.selectAppById(appId);
+        return applicationMapper.selectAppById(appId);
     }
 
     @Override
     public int deleteRemoveJobs() {
         return jobMapper.deleteRemovejob();
+    }
+
+    @Override
+    public List<Job> findRemoveJobs() {
+        return jobMapper.selectRemoveJobs();
     }
 }
