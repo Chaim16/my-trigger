@@ -9,6 +9,7 @@ import cn.onedawn.mytrigger.utils.StatusCode;
 import com.alibaba.fastjson.JSON;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 /**
  * @author qingming yu
@@ -21,7 +22,12 @@ public class HTTPCall {
 
     public static Response call(CallRequest callRequest) {
         Response response = new Response();
-        String url = "http://" + callRequest.getJob().getCallHost() + ":" + ConstValue.HTTP_CALL_SERVER_PORT + "/call";
+        String[] hosts = callRequest.getJob().getCallHost().split(";");
+        // 随机挑选一个主机进行调度
+        Random random = new Random();
+        int index = Math.abs(random.nextInt() % hosts.length);
+        String callHost = hosts[index];
+        String url = "http://" + callHost + ":" + ConstValue.HTTP_CALL_SERVER_PORT + "/call";
 
         long start = System.currentTimeMillis();
         HttpResponse execute = HttpRequest.post(url)
