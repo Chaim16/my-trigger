@@ -12,7 +12,7 @@ public class ConstValue {
 
     public static final String REQUEST_DATA = "data";
 
-    public static final String SERVER = "10.67.37.210";
+    public static final String SERVER = "127.0.0.1";
     public static final String SERVER_PORT = "8080";
     public static final String BASE_URL = "http://" + ConstValue.SERVER + ":" + ConstValue.SERVER_PORT;
 

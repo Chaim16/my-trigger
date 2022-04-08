@@ -96,7 +96,7 @@
     </resultMap>
 
     <select id="selectAppById" parameterType="java.lang.Long" resultMap="selectAppMap">
-        select * from trigger_job where id = #{appId}
+        select * from application where id = #{appId}
     </select>
 
     <select id="selectJobById" parameterType="java.lang.Long" resultMap="selectJobMap">

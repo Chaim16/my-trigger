@@ -6,11 +6,6 @@
         <serverdata>
           <mappings>
             <mapping deploy="/my-trigger" local="$PROJECT_DIR$" web="/" />
-            <mapping local="$PROJECT_DIR$/trigger-client" />
-            <mapping local="$PROJECT_DIR$/trigger-admin" />
-            <mapping local="$PROJECT_DIR$/trigger-test" />
-            <mapping local="$PROJECT_DIR$/trigger-center" />
-            <mapping local="$PROJECT_DIR$/trigger-common" />
           </mappings>
         </serverdata>
       </paths>

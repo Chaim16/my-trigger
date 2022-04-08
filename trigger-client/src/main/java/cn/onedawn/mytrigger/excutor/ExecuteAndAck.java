@@ -25,15 +25,12 @@ public class ExecuteAndAck implements Runnable{
     @SneakyThrows
     @Override
     public void run() {
-        long start = System.currentTimeMillis();
-
-        boolean success = task.run();
-
+        String str =  callRequest.getJob().getCallData();
+        System.out.println(str);
+        boolean success = task.run(callRequest.getJob().getCallData());
         if (!success) {
             throw new MyTriggerException("[call] task excute faild");
         }
-        long end = System.currentTimeMillis();
-        System.out.println("[call] task successfully " + (end - start) + " ms");
         RocketMQStrategy.ack(callRequest.getJob().getId());
     }
 }

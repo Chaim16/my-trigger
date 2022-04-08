@@ -8,5 +8,5 @@ package cn.onedawn.mytrigger.call;
  * @createTime 2021年10月29日 03:42:00
  */
 public interface Task {
-    boolean run();
+    boolean run(String callData);
 }

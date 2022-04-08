@@ -51,11 +51,11 @@ public class DubboCallServiceClient {
     private static final Object callHandlerMapLock = new Object();
 
     public synchronized ReferenceConfig getReferenceConfig(String appName, String callHost) {
-        String key;
+        String key = "my-trigger-client-";
         if (StringUtils.isNotBlank(callHost)) {
-            key = appName + "_" + callHost;
+            key += appName + "_" + callHost;
         } else {
-            key = appName;
+            key += appName;
         }
         if (referenceConfigMap.containsKey(key)) {
             return referenceConfigMap.get(key);
@@ -92,11 +92,11 @@ public class DubboCallServiceClient {
     }
 
     private CallHandler getCallHandler(ReferenceConfig<CallHandler> referenceConfig, String appName, String callHost) {
-        String key;
+        String key = "my-trigger-client-";
         if (StringUtils.isNotBlank(callHost)) {
-            key = appName + "_" + callHost;
+            key += appName + "_" + callHost;
         } else {
-            key = appName;
+            key += appName;
         }
         if (callHandlerMap.containsKey(key)) {
             return callHandlerMap.get(key);
