@@ -65,4 +65,16 @@ public class ApplicationController {
         return String.valueOf(appId);
     }
 
+
+    @RequestMapping("/findAppNameById")
+    public String findAppNameById(HttpServletRequest request) throws MyTriggerException {
+        String appId = request.getParameter("id");
+        if (appId == null || appId.trim().length() == 0) {
+            logger.error("appName id null or black");
+            throw new MyTriggerException("appName is null or black");
+        }
+        String appName = appService.findAppNameById(appId);
+        return String.valueOf(appName);
+    }
+
 }

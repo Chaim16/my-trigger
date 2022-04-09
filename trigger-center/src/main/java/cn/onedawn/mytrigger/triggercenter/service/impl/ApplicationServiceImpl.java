@@ -27,4 +27,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     public Long findAppIdByAppName(String appName) {
         return appMapper.selectAppIdByAppName(appName);
     }
+
+    @Override
+    public String findAppNameById(String appId) {
+        return appMapper.selectAppNameById(appId);
+    }
 }

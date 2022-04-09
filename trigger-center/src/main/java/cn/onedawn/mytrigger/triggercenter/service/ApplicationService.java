@@ -13,4 +13,6 @@ public interface ApplicationService {
     boolean register(Application app);
 
     Long findAppIdByAppName(String appName);
+
+    String findAppNameById(String appId);
 }

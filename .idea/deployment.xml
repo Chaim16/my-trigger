@@ -5,7 +5,7 @@
       <paths name="10.67.37.210">
         <serverdata>
           <mappings>
-            <mapping deploy="/my-trigger" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

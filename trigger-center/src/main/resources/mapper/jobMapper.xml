@@ -84,7 +84,7 @@
 
     <update id="ack" parameterType="java.lang.Long">
         update trigger_job
-        set status = 'finished', modify_time = now()
+        set status = 'finish', modify_time = now()
         where id = #{jobId}
     </update>
 

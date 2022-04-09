@@ -18,4 +18,6 @@ public interface ApplicationMapper {
 
 
     Application selectAppById(Long appId);
+
+    String selectAppNameById(String appId);
 }

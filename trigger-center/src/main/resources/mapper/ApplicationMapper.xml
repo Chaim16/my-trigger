@@ -21,4 +21,8 @@
         select * from application where id = #{appId}
     </select>
 
+    <select id="selectAppNameById" parameterType="java.lang.Long" resultType="java.lang.String">
+        select name from application where id = #{appId}
+    </select>
+
 </mapper>
