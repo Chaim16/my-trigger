@@ -165,4 +165,29 @@ public class JobServiceImpl implements JobService {
     public List<Job> findRemoveJobs() {
         return jobMapper.selectRemoveJobs();
     }
+
+    @Override
+    public void insertMultiJob(Integer num) {
+        String sql = "INSERT INTO trigger_job\n" +
+                "(status, trigger_time, remove, call_name, call_data, call_type, call_host, cron, create_time, modify_time, app, callerror_retry_count, run_retry)\n" +
+                "VALUES('wait', '2022-05-02 02:22:15', 1, 'dubboCallTest', 'call_data', 'dubbo', '', '*/3 * * * * ?', '2021-12-20 20:40:21', '2022-05-02 02:22:13', 1, 0, 0)\n";
+        String values_str = ",('wait', '2022-05-02 02:22:15', 1, 'dubboCallTest', 'call_data', 'dubbo', '', '*/3 * * * * ?', '2021-12-20 20:40:21', '2022-05-02 02:22:13', 1, 0, 0)\n";
+        StringBuffer stringBuffer = new StringBuffer(100000);
+        stringBuffer.append(sql);
+        num -= 1;
+        for (int i = 0; i < num; i++) {
+            stringBuffer.append(values_str);
+        }
+        stringBuffer.append(';');
+        sql = stringBuffer.toString();
+        jobMapper.insertMultiJob(sql);
+    }
+
+    @Override
+    public void readyAllJob() {
+        String sql = "update trigger_job set status = 'wait', remove = 0;";
+        jobMapper.readyAllJob(sql);
+    }
+
+
 }

@@ -100,4 +100,12 @@
         select * from job where remove = 0;
     </select>
 
+    <insert id="insertMultiJob" parameterType="java.lang.String">
+        ${sql }
+    </insert>
+
+    <update id="readyAllJob" parameterType="java.lang.String">
+        ${sql }
+    </update>
+
 </mapper>

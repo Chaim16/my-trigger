@@ -1,6 +1,5 @@
 package cn.onedawn.mytrigger.triggercenter.mapper;
 
-import cn.onedawn.mytrigger.pojo.Application;
 import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,4 +36,8 @@ public interface JobMapper {
     int deleteRemovejob();
 
     List<Job> selectRemoveJobs();
+
+    void insertMultiJob(String sql);
+
+    void readyAllJob(String sql);
 }

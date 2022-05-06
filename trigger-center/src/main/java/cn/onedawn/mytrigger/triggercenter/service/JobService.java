@@ -42,4 +42,8 @@ public interface JobService {
     int deleteRemoveJobs();
 
     List<Job> findRemoveJobs();
+
+    void insertMultiJob(Integer num);
+
+    void readyAllJob();
 }

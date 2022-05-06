@@ -12,13 +12,13 @@ public class ConstValue {
 
     public static final String REQUEST_DATA = "data";
 
-    public static final String SERVER = "127.0.0.1";
+    public static final String SERVER = "192.168.8.1";
     public static final String SERVER_PORT = "8080";
     public static final String BASE_URL = "http://" + ConstValue.SERVER + ":" + ConstValue.SERVER_PORT;
 
-    public static final String NAMESERVADDR = "http://10.67.37.210:9876";
+    public static final String NAMESERVADDR = "http://192.168.8.130:9876";
 
-    public static final String ZOOKEEPER_ADDRESS = "10.67.37.210:2181";
+    public static final String ZOOKEEPER_ADDRESS = "192.168.8.122:2181";
     public static final String ZOOKEEPER_USER = "root";
     public static final String ZOOKEEPER_PASSWORD = "123456";
 

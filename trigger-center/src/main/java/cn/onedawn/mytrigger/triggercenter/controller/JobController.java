@@ -166,4 +166,17 @@ public class JobController {
         return response;
     }
 
+    @RequestMapping("insertMultiJob")
+    public boolean puttMultiJob(HttpServletRequest request){
+        int num = Integer.parseInt(request.getParameter("num"));
+        jobService.insertMultiJob(num);
+        return true;
+    }
+
+    @RequestMapping("readyAllJob")
+    public boolean readyAllJob(HttpServletRequest request) {
+        jobService.readyAllJob();
+        return true;
+    }
+
 }

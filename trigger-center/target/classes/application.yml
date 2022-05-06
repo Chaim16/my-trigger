@@ -3,9 +3,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.67.37.210:3306/mytrigger
+    url: jdbc:mysql://182.92.233.6:3306/mytrigger
     username: root
-    password: Nsf0cus!@
+    password: YQM@0229yqm
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -19,7 +19,7 @@ logging:
     path: D:/logs/my-trigger
 
 elasticsearch:
-  host: 10.67.37.210
+  host: 182.92.233.6
   port: 9200
   index:
     name: 'my-trigger'
