@@ -5,10 +5,7 @@ import cn.onedawn.mytrigger.pojo.Job;
 import cn.onedawn.mytrigger.triggercenter.service.impl.JobServiceImpl;
 import cn.onedawn.mytrigger.type.CallType;
 import cn.onedawn.mytrigger.type.JobStatusType;
-import cn.onedawn.mytrigger.utils.SpringBeanFactory;
-import javafx.print.PrinterJob;
 import org.apache.http.HttpHost;
-import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -28,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,7 +47,6 @@ public class ElasticsearchService {
     private static String elasticsearchIndexName;
     @Autowired
     private  ApplicationService applicationService;
-
 
 
     @Value("${elasticsearch.host}")
@@ -154,7 +149,7 @@ public class ElasticsearchService {
                 Map<String, Object> sourceAsMap = hit.getSourceAsMap();
                 Job task = new Job();
                 task.setId(Long.valueOf((Integer) sourceAsMap.get("id")));
-                task.setStatus(JobStatusType.finish);
+                task.setStatus(JobStatusType.finished);
                 String callType = (String) sourceAsMap.get("call_type");
                 task.setCallType("http".equals(callType) ? CallType.http : CallType.dubbo);
                 Long appId = applicationService.findAppIdByAppName((String) sourceAsMap.get("appName"));

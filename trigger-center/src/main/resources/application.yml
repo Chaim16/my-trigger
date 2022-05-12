@@ -19,7 +19,7 @@ logging:
     path: D:/logs/my-trigger
 
 elasticsearch:
-  host: 182.92.233.6
+  host: 8.142.11.29
   port: 9200
   index:
     name: 'my-trigger'

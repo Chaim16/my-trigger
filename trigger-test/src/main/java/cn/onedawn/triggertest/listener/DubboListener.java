@@ -1,8 +1,11 @@
 package cn.onedawn.triggertest.listener;
 
 import cn.onedawn.mytrigger.MyTriggerClient;
+import cn.onedawn.mytrigger.exception.MyTriggerException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * @author qingming yu
@@ -16,8 +19,16 @@ public class DubboListener implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        MyTriggerClient myTriggerClient = new MyTriggerClient();
-        myTriggerClient.init("mayi");
-        System.out.println("mytrigger-client inited");
+        try {
+            MyTriggerClient myTriggerClient = new MyTriggerClient();
+            System.out.println("mytrigger-client initing");
+            myTriggerClient.init("mayi");
+            System.out.println("mytrigger-client inited");
+        } catch (MyTriggerException e) {
+            e.printStackTrace();
+            System.out.println("message: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("message: " + e.getMessage());
+        }
     }
 }

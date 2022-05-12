@@ -32,6 +32,7 @@ public class CallJobTask implements Callable {
 
     private List<Job> jobs;
     private JobService jobService;
+    /* 手动trigger */
     private boolean trigger;
     @Value("${trigger.retry.count}")
     private static int triggerRetryCount;

@@ -29,7 +29,7 @@ public interface JobService {
 
     boolean pause(Long jobId);
 
-    boolean ack(Long jobId) throws MyTriggerException, ParseException, IOException;
+    boolean ack(Long jobId) throws MyTriggerException, ParseException, IOException, CloneNotSupportedException;
 
     List<Job> findAllJobByApp(Long id);
 

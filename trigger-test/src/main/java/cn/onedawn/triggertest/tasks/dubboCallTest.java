@@ -21,7 +21,7 @@ public class dubboCallTest implements Task {
         if (callData != null) {
             System.out.println("callData ====> " + callData);
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-dd-ss HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println("成功调度" + simpleDateFormat.format(new Date()));
         return true;
     }

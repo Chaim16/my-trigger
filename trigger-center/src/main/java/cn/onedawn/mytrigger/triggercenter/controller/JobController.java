@@ -144,6 +144,32 @@ public class JobController {
         return response;
     }
 
+    @RequestMapping("trigger")
+    public Response trigger(HttpServletRequest request) {
+        Response response = new Response();
+        long start = System.currentTimeMillis();
+        Long jobId = null;
+        boolean result = false;
+        try {
+            String requestData = request.getParameter(ConstValue.REQUEST_DATA);
+            TriggerRequest triggerRequest = JSON.parseObject(requestData, TriggerRequest.class);
+            triggerRequest.check();
+
+            jobId = triggerRequest.getJobId();
+            result = jobService.trigger(jobId);
+        } catch (MyTriggerException e) {
+            logger.info("[trigger job by http] failed, jobId:{}", jobId);
+        }
+        long end = System.currentTimeMillis();
+
+        response.setSuccess(result)
+                .setInfo(null)
+                .setType(ResponseType.trigger)
+                .setTime(end - start);
+        logger.info("[trigger job by http] success, jobId:{}, time consuming:{} ms", jobId, response.getTime());
+        return response;
+    }
+
     @RequestMapping("findAllJobByApp")
     public Response findAllJob(HttpServletRequest request) {
         Response response = new Response();

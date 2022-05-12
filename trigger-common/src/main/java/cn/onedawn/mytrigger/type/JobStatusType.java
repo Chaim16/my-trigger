@@ -15,7 +15,7 @@ public enum JobStatusType {
     /** 正在调度 */
     run("run"),
     /** 已经完成 */
-    finish("finish"),
+    finished("finished"),
     /** 暂停调度 */
     pause("pause"),
     /** 调度失败 */

@@ -7,6 +7,7 @@ import cn.onedawn.mytrigger.triggercenter.mapper.ApplicationMapper;
 import cn.onedawn.mytrigger.triggercenter.mapper.JobMapper;
 import cn.onedawn.mytrigger.triggercenter.service.ElasticsearchService;
 import cn.onedawn.mytrigger.triggercenter.service.JobService;
+import cn.onedawn.mytrigger.triggercenter.tasks.CallJobTask;
 import cn.onedawn.mytrigger.type.JobStatusType;
 import cn.onedawn.mytrigger.utils.ConstValue;
 import cn.onedawn.mytrigger.utils.CronUtil;
@@ -15,12 +16,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * @author qingming yu
@@ -64,7 +69,26 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Transactional
     public boolean trigger(Long jobId) {
+        Job job = jobMapper.selectJobById(jobId);
+        if (job == null) {
+            logger.error("[trigger job] cann`t find job by id: {}", jobId);
+            return false;
+        }
+        try {
+            job.setTrigger(1);
+            FutureTask futureTask = new FutureTask(new CallJobTask(job, true));
+            Thread callJobTask = new Thread(futureTask);
+            callJobTask.start();
+            return (boolean) futureTask.get();
+        } catch (InterruptedException e) {
+            logger.error("[trigger job] failed trigger job by id: {}", jobId);
+            logger.error(Arrays.toString(e.getStackTrace()));
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -105,31 +129,45 @@ public class JobServiceImpl implements JobService {
      * 如果是周期性调度，则更新状态和下一次调度时间
      */
     @Override
-    public boolean ack(Long jobId) throws MyTriggerException, ParseException, IOException {
-        Job job = findJobById(jobId);
-        Application app = applicationMapper.selectAppById(job.getApp());
-        // 一次性任务
-        if (CronUtil.checkCronOneTime(job.getCron())) {
-            remove(jobId);
-            boolean result = jobMapper.ack(jobId) > 0;
-            if (result) {
-                // 往ES里面存
-                ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
-                elasticsearchService.Index(job, app);
+    @Transactional
+    public boolean ack(Long jobId) throws MyTriggerException, ParseException, IOException, CloneNotSupportedException {
+        try {
+            Job job = findJobById(jobId);
+            Application app = applicationMapper.selectAppById(job.getApp());
+            // 一次性任务
+            if (CronUtil.checkCronOneTime(job.getCron())) {
+                remove(jobId);
+                boolean result = jobMapper.ack(jobId) > 0;
+                if (result) {
+                    // 往ES里面存
+                    ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
+                    elasticsearchService.Index(job, app);
+                }
+                return result;
+            } else { // 周期性任务
+                if (job.getRemove() == 1) {
+                    job.setStatus(JobStatusType.finished);
+                } else {
+                    // ES内存储本次调度
+                    Job finishJob = job.clone();
+                    finishJob.setStatus(JobStatusType.finished);
+                    ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
+                    elasticsearchService.Index(job, app);
+
+                    // 更新MySQL数据
+                    job.setStatus(JobStatusType.wait);
+                    job.setTriggerTime(dateFormat.format(CronUtil.getLoopTime(job.getCron(), System.currentTimeMillis())));
+                    job.setCallerrorRetryCount(0);
+                    job.setRunRetry(0);
+                }
+                return jobMapper.modify(job) > 0;
             }
-            return result;
-        } else { // 周期性任务
-            if (job.getRemove() == 1) {
-                job.setStatus(JobStatusType.finish);
-            } else {
-                job.setStatus(JobStatusType.wait);
-                // 设置下一次调度的时间
-                job.setTriggerTime(dateFormat.format(CronUtil.getLoopTime(job.getCron(), System.currentTimeMillis())));
-                job.setCallerrorRetryCount(0);
-                job.setRunRetry(0);
-            }
-            return jobMapper.modify(job) > 0;
+        } catch (MyTriggerException e) {
+            logger.error("[ack job] failed ack! jobId:{}", jobId);
+            logger.error(String.valueOf(e.getMessage()));
+            e.printStackTrace();
         }
+        return false;
     }
 
     private Job findJobById(Long jobId) {

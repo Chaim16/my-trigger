@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class Job implements Serializable {
+public class Job implements Serializable, Cloneable {
     @JSONField(name = "id")
     private Long id;
 
@@ -59,5 +59,16 @@ public class Job implements Serializable {
 
     @JSONField(name = "runRetry")
     private Integer runRetry;
+
+    /**
+     * 是否手动触发调度：0否，1是
+     */
+    @JSONField(name = "trigger")
+    private Integer trigger;
+
+    @Override
+    public Job clone() throws CloneNotSupportedException {
+        return (Job) super.clone();
+    }
 
 }
