@@ -14,14 +14,7 @@
         <module name="trigger-client" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="8">
-      <module name="my-trigger" target="1.5" />
-      <module name="trigger-admin" target="1.8" />
-      <module name="trigger-center" target="8" />
-      <module name="trigger-client" target="1.8" />
-      <module name="trigger-common" target="6" />
-      <module name="trigger-test" target="1.8" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="8" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
