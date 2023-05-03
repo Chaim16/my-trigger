@@ -140,8 +140,8 @@ public class JobServiceImpl implements JobService {
                 boolean result = jobMapper.ack(jobId) > 0;
                 if (result) {
                     // 往ES里面存
-                    ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
-                    elasticsearchService.Index(job, app);
+//                    ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
+//                    elasticsearchService.Index(job, app);
                 }
                 return result;
             } else { // 周期性任务
@@ -151,8 +151,8 @@ public class JobServiceImpl implements JobService {
                     // ES内存储本次调度
                     Job finishJob = job.clone();
                     finishJob.setStatus(JobStatusType.finished);
-                    ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
-                    elasticsearchService.Index(job, app);
+//                    ElasticsearchService elasticsearchService = (ElasticsearchService) SpringBeanFactory.getBean("elasticsearchService");
+//                    elasticsearchService.Index(job, app);
 
                     // 更新MySQL数据
                     job.setStatus(JobStatusType.wait);

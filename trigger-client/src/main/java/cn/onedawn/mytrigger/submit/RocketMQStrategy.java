@@ -30,6 +30,7 @@ public class RocketMQStrategy {
     public void init() {
         producer = new DefaultMQProducer("my_trigger");
         producer.setNamesrvAddr(ConstValue.NAMESERVADDR);
+        producer.setSendMsgTimeout(10000);
         try {
             producer.start();
         } catch (MQClientException e) {

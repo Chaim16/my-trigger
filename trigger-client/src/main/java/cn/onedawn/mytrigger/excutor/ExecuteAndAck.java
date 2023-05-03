@@ -5,6 +5,11 @@ import cn.onedawn.mytrigger.exception.MyTriggerException;
 import cn.onedawn.mytrigger.request.impl.CallRequest;
 import cn.onedawn.mytrigger.submit.RocketMQStrategy;
 import lombok.SneakyThrows;
+import org.apache.rocketmq.client.exception.MQBrokerException;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.remoting.exception.RemotingException;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author qingming yu
@@ -25,10 +30,15 @@ public class ExecuteAndAck implements Runnable{
     @SneakyThrows
     @Override
     public void run() {
-        boolean success = task.run(callRequest.getJob().getCallData());
-        if (!success) {
-            throw new MyTriggerException("[call] task excute faild");
+        try {
+            boolean success = task.run(callRequest.getJob().getCallData());
+            if (!success) {
+                throw new MyTriggerException("[call] task excute faild");
+            }
+            RocketMQStrategy.ack(callRequest.getJob().getId());
+        } catch (Exception e) {
+            System.out.println("调度执行失败，详细堆栈:" + e.getMessage());
+            e.printStackTrace();
         }
-        RocketMQStrategy.ack(callRequest.getJob().getId());
     }
 }

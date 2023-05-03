@@ -51,27 +51,29 @@ class JobAndAppAndUserTest {
      */
     @Test
     public void jobRegisterTest() throws MyTriggerException {
-        Job job = new Job();
-        job.setStatus(JobStatusType.wait);
-        job.setCron("1 * * * * ?")
-                .setRemove((byte) 0)
-                .setApp(6L)
-                .setCallName("dubboCallTest")
-                .setCallType(CallType.dubbo);
+        for (int i = 1; i < 50000; i++) {
+            Job job = new Job();
+            job.setStatus(JobStatusType.wait);
+            job.setCron("*/3 * * * * ?")
+                    .setRemove((byte) 0)
+                    .setApp(2L)
+                    .setCallName("dubboCallTest")
+                    .setCallType(CallType.dubbo);
 
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setJob(job);
-        registerRequest.check();
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.setJob(job);
+            registerRequest.check();
 
-        Map<String, Object> formMap = new HashMap<>();
-        formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(registerRequest));
+            Map<String, Object> formMap = new HashMap<>();
+            formMap.put(ConstValue.REQUEST_DATA, JSON.toJSONString(registerRequest));
 
-        String body = HttpRequest.post("http://localhost:8080/job/register")
-                .form(formMap)
-                .timeout(5000)
-                .execute()
-                .body();
-        System.out.println(body);
+            String body = HttpRequest.post("http://localhost:8080/job/register")
+                    .form(formMap)
+                    .timeout(5000)
+                    .execute()
+                    .body();
+            System.out.println(body);
+        }
     }
 
     /**

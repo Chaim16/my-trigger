@@ -27,4 +27,5 @@ cn\onedawn\mytrigger\pojo\Application.class
 cn\onedawn\mytrigger\request\impl\CommonRequest.class
 cn\onedawn\mytrigger\utils\ConstValue.class
 cn\onedawn\mytrigger\request\impl\ModifyRequest.class
+cn\onedawn\mytrigger\request\impl\TriggerRequest.class
 cn\onedawn\mytrigger\utils\CronExpression.class

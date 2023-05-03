@@ -3,15 +3,27 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://182.92.233.6:3306/mytrigger
-    username: root
-    password: YQM@0229yqm
+    url: jdbc:mysql://192.168.5.4:3306/mytrigger
+    username: mytrigger
+    password: mytrigger
+    hikari:
+      connection-timeout=30000
+      maximum-pool-size=50
+      minimum-idle=3
+      idle-timeout=600000
+      pool-name=my-pool
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: cn.onedawn.mytrigger.triggercenter.dao.mapper
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    cache-enabled: true
+    jdbc-type-for-null: null
+    auto-mapping-behavior: full
 
 logging:
   config: classpath:logback-spring.xml
@@ -19,7 +31,7 @@ logging:
     path: D:/logs/my-trigger
 
 elasticsearch:
-  host: 8.142.11.29
+  host: 192.168.5.4
   port: 9200
   index:
     name: 'my-trigger'
