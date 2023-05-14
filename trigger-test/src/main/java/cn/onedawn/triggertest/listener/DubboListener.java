@@ -22,7 +22,7 @@ public class DubboListener implements InitializingBean {
         try {
             MyTriggerClient myTriggerClient = new MyTriggerClient();
             System.out.println("mytrigger-client initing");
-            myTriggerClient.init("mayi");
+            myTriggerClient.init("trigger-test");
             System.out.println("mytrigger-client inited");
         } catch (MyTriggerException e) {
             e.printStackTrace();
